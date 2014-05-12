@@ -137,6 +137,9 @@
             var form = $(this).closest('form');
             var matchedParamsInRoute = $(form).attr('action').match(/{\w+}/g);
             var theId = $(this).attr('rel');
+
+            var urlForm = $(form).attr('action');
+
             if (matchedParamsInRoute) {
                 $("form#" + $(form).attr('id') + " input[type=text]").each(function() {
                     var input = $(this);
@@ -145,8 +148,7 @@
                         try {
                             var tmp = matchedParamsInRoute[index].replace('{', '').replace('}', '');
                             if ($(this).attr('id') == tmp) {
-                                var newFormAction = $(form).attr('action').replace(matchedParamsInRoute[index], $(this).val());
-                                $(form).attr('action', newFormAction);
+                                urlForm = urlForm.replace(matchedParamsInRoute[index], $(this).val());
                             }
                         } catch (err) {
                             console.log(err);
@@ -156,10 +158,8 @@
             };
             var st_headers = {};
             st_headers[$('#apikey_key').val()] = $('#apikey_value').val();
-            serializedData = $(form).serialize().replace(/&?[^=&]+=(&|$)/g,'');
             $.ajax({
-                url: $('#apiUrl').val() + $(form).attr('action'),
-                data: serializedData,
+                url: $('#apiUrl').val() + urlForm,
                 type: '' + $(form).attr('method') + '',
                 dataType: 'json',
                 headers: st_headers
