@@ -139,6 +139,7 @@
             var theId = $(this).attr('rel');
 
             var urlForm = $(form).attr('action');
+            var dataSerialize = '';
 
             if (matchedParamsInRoute) {
                 $("form#" + $(form).attr('id') + " input[type=text]").each(function() {
@@ -156,10 +157,16 @@
                     }
                 });
             };
+            $('#' + $(form).attr('id') + ' input[type=text]').each(function() {
+                if (matchedParamsInRoute.indexOf('{'+$(this).attr('id')+'}') === -1 ) {
+                    dataSerialize += $(this).serialize() + '&';
+                }
+            });
             var st_headers = {};
             st_headers[$('#apikey_key').val()] = $('#apikey_value').val();
             $.ajax({
                 url: $('#apiUrl').val() + urlForm,
+                data : dataSerialize,
                 type: '' + $(form).attr('method') + '',
                 dataType: 'json',
                 headers: st_headers
