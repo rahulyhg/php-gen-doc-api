@@ -281,22 +281,77 @@ class Builder
         <div class="panel-body">
 
             <!-- Nav tabs -->
-            <ul class="nav nav-tabs" id="php-apidoctab{{ elt_id }}">
+            <!-- <ul class="nav nav-tabs" id="php-apidoctab{{ elt_id }}">
                 <li class="active"><a href="#info{{ elt_id }}" data-toggle="tab">Info</a></li>
                 <li><a href="#sandbox{{ elt_id }}" data-toggle="tab">Sandbox</a></li>
                 <li><a href="#sample{{ elt_id }}" data-toggle="tab">Sample output</a></li>
-            </ul>
+            </ul>-->
 
             <!-- Tab panes -->
             <div class="tab-content">
 
                 <div class="tab-pane active" id="info{{ elt_id }}">
-                    {{ description }}
+                    <h4>Implementation Notes</h4>
+                    {{ description }}<br/><br/>
                     <hr>
+
+                    <h4>Reponse Classes</h4>
+                    <strong>Return value</strong><br/>
+                    <code>Map{ "meta": MetaObject, "response": ResponseObject }</code><br/><br/>
+
+                    <strong>MetaObject</strong><br/>
+                    {{ table_meta_object }}
+                    <br/>
+                    <strong>ResponseObject</strong><br/>
+                    {{ table_response_object }}
+                    <br/>
+                    <hr>
+
+
+                    <h4>Reponse Errors</h4>
+                    {{ table_status_code }}
+                    <hr>
+
+                    <h4>Path Parameters</h4>
                     {{ parameters }}
+                    {{ sandbox_form }}
+                    <hr>
+
+                    <div class="col-md-12" style="display:none;">
+
+                        <h4>Request URL</h4>
+                        <div id="request_url_{{ elt_id }}">
+                            <pre></pre>
+                        </div>
+
+                        <h4>Request Headers</h4>
+                        <div id="request_headers_{{ elt_id }}">
+                            <pre></pre>
+                        </div>
+
+                        <h4>Response Code</h4>
+                        <div id="response_code_{{ elt_id }}">
+                            <pre></pre>
+                        </div>
+
+                        <h4>Response Headers</h4>
+                        <div id="response_headers_{{ elt_id }}">
+                            <pre></pre>
+                        </div>
+
+                        <h4>Response Body</h4>
+                        <div id="response_body_{{ elt_id }}">
+                            <pre></pre>
+                        </div>
+                    </div>
+                    <code id="response{{ elt_id }}"></code>
+
+
+
+
                 </div><!-- #info -->
 
-                <div class="tab-pane" id="sandbox{{ elt_id }}">
+                <-- <div class="tab-pane" id="sandbox{{ elt_id }}">
                     <div class="row">
                         <div class="col-md-4">
                             Parameters
@@ -317,7 +372,7 @@ class Builder
                             {{ sample_response }}
                         </div>
                     </div>
-                </div><!-- #sample -->
+                </div><!-- #sample --> -->
 
             </div><!-- .tab-content -->
         </div>
@@ -325,8 +380,6 @@ class Builder
 </div>';
 
         static $sampleReponseTpl = '
-{{ description }}
-<hr>
 <pre id="sample_response{{ elt_id }}">{{ response }}</pre>';
 
         static $paramTableTpl = '
