@@ -132,7 +132,7 @@ class Builder
     }
 
     /**
-     * Generate the sample output
+     * Generate the object response
      *
      * @param  array   $st_params
      * @param  integer $counter
@@ -396,17 +396,17 @@ class Builder
 
                     <hr>
 
-                    <div class="col-md-12" style="display:none;">
+                    <div id="response_{{ elt_id }}" class="col-md-12" style="display:none;">
 
                         <h4>Request URL</h4>
                         <div id="request_url_{{ elt_id }}">
                             <pre></pre>
                         </div>
 
-                        <h4>Request Headers</h4>
+                        <!-- <h4>Request Headers</h4>
                         <div id="request_headers_{{ elt_id }}">
                             <pre></pre>
-                        </div>
+                        </div> -->
 
                         <h4>Response Code</h4>
                         <div id="response_code_{{ elt_id }}">
@@ -420,10 +420,9 @@ class Builder
 
                         <h4>Response Body</h4>
                         <div id="response_body_{{ elt_id }}">
-                            <pre></pre>
+                            <pre class="prettyprint"></pre>
                         </div>
                     </div>
-                    <pre style="display:none;" class="prettyprint" id="response{{ elt_id }}"></pre>
                 </div><!-- #info -->
 
                 <div class="tab-pane" id="sample{{ elt_id }}">
@@ -457,7 +456,7 @@ class Builder
             {{ tbody }}
         </tbody>
     </table>
-    <button type="submit" class="btn btn-success send" rel="{{ elt_id }}">Send</button>
+    <button type="submit" class="btn btn-danger send" rel="{{ elt_id }}">EXECUTE REQUEST</button>
 </form>';
 
 
