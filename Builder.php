@@ -119,7 +119,6 @@ class Builder
                     '{{ route }}'                 => $docs['ApiRoute'][0]['name'],
                     '{{ description }}'           => $docs['ApiDescription'][0]['description'],
                     '{{ parameters }}'            => $this->generateParamsTemplate($counter, $docs),
-                    '{{ sandbox_form }}'          => $this->generateRouteParametersForm($docs, $counter),
                     '{{ sample_response }}'       => $this->generateSampleOutput($docs, $counter),
                     '{{ table_object_response }}' => $this->generateObjectResponse($docs, $counter),
                 );
@@ -261,33 +260,6 @@ class Builder
             '{{ route }}'  => $st_params['ApiRoute'][0]['name'],
             '{{ tbody }}' => implode(PHP_EOL, $body),
         ));
-    }
-
-    /**
-     * Generate route paramteres form
-     *
-     * @param  array      $st_params
-     * @param  integer    $counter
-     * @return void|mixed
-     */
-    private function generateRouteParametersForm($st_params, $counter)
-    {
-        $body = array();
-        if (is_array($st_params['ApiParams']))
-        {
-            foreach ($st_params['ApiParams'] as $params)
-            {
-                $body[] = strtr(static::$sandboxFormInputTpl, array('{{ name }}' => $params['name']));
-            }
-        }
-        $tr = array(
-            '{{ elt_id }}' => $counter,
-            '{{ method }}' => $st_params['ApiMethod'][0]['type'],
-            '{{ route }}'  => $st_params['ApiRoute'][0]['name'],
-            '{{ body }}'   => implode(PHP_EOL, $body),
-        );
-
-        return strtr(static::$sandboxFormTpl, $tr);
     }
 
     /**
@@ -454,23 +426,6 @@ class Builder
                     <pre style="display:none;" class="prettyprint" id="response{{ elt_id }}"></pre>
                 </div><!-- #info -->
 
-
-
-                <div class="tab-pane" id="sandbox{{ elt_id }}">
-                    <div class="row">
-                        <div class="col-md-4">
-                            Parameters
-                            <hr>
-                            {{ sandbox_form }}
-                        </div>
-                        <div class="col-md-4">
-                            Response
-                            <hr>
-                            <code id="response{{ elt_id }}"></code>
-                        </div>
-                    </div>
-                </div><!-- #sandbox -->
-
                 <div class="tab-pane" id="sample{{ elt_id }}">
                     <div class="row">
                         <div class="col-md-12">
@@ -522,14 +477,4 @@ class Builder
     <i class="btn glyphicon glyphicon-exclamation-sign"></i>
 </a>';
 
-        static $sandboxFormTpl = '
-<form enctype="application/x-www-form-urlencoded" role="form" action="{{ route }}" method="{{ method }}" name="form{{ elt_id }}" id="form{{ elt_id }}">
-    {{ body }}
-    <button type="submit" class="btn btn-success send" rel="{{ elt_id }}">Send</button>
-</form>';
-
-        static $sandboxFormInputTpl = '
-<div class="form-group">
-    <input type="text" class="form-control input-sm" id="{{ name }}" placeholder="{{ name }}" name="{{ name }}">
-</div>';
 }
