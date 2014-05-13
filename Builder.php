@@ -114,13 +114,14 @@ class Builder
                     continue;
                 }
                 $tr = array(
-                    '{{ elt_id }}'          => $counter,
-                    '{{ method }}'          => $this->generateBadgeForMethod($docs),
-                    '{{ route }}'           => $docs['ApiRoute'][0]['name'],
-                    '{{ description }}'     => $docs['ApiDescription'][0]['description'],
-                    '{{ parameters }}'      => $this->generateParamsTemplate($counter, $docs),
-                    '{{ sandbox_form }}'    => $this->generateRouteParametersForm($docs, $counter),
-                    '{{ sample_response }}' => $this->generateSampleOutput($docs, $counter),
+                    '{{ elt_id }}'                => $counter,
+                    '{{ method }}'                => $this->generateBadgeForMethod($docs),
+                    '{{ route }}'                 => $docs['ApiRoute'][0]['name'],
+                    '{{ description }}'           => $docs['ApiDescription'][0]['description'],
+                    '{{ parameters }}'            => $this->generateParamsTemplate($counter, $docs),
+                    '{{ sandbox_form }}'          => $this->generateRouteParametersForm($docs, $counter),
+                    '{{ sample_response }}'       => $this->generateSampleOutput($docs, $counter),
+                    '{{ table_object_response }}' => $this->generateObjectResponse($docs, $counter),
                 );
                 $template[] = strtr(static::$mainTpl, $tr);
                 $counter++;
@@ -138,13 +139,78 @@ class Builder
      * @param  integer $counter
      * @return string
      */
+    private function generateObjectResponse($st_params, $counter)
+    {
+        if (!isset($st_params['ApiReturnObject'])) {
+            return 'NA';
+        }
+
+        $ret = array();
+        $sections = array();
+
+        foreach ($st_params['ApiReturnObject'] as $params) {
+
+            $tr = array(
+                '{{ elt_id }}' => $counter,
+                '{{ name }}'   => $params['name'],
+                '{{ type }}'   => $params['type'],
+                '{{ desc }}'   => $params['desc'],
+            );
+
+            if (!in_array($params['section'], $sections)) {
+                $ret[] = strtr(static::$responseSectionTpl, array( '{{ section }}' => $params['section']));
+                array_push($sections, $params['section']);
+            }
+
+            $ret[] = strtr(static::$reponseBodyTpl, $tr);
+        }
+
+
+        return strtr(static::$responseTpl, array(
+            '{{ elt_id }}' => $counter,
+            '{{ section }}' => $st_params['ApiReturnObject'][0]['section'],
+            '{{ responseTableBody }}' => implode(PHP_EOL, $ret),
+        ));
+    }
+
+        static $responseSectionTpl = '
+<tr class="info"><th colspan="3"><i>{{ section }}</i></th></tr>';
+
+        static $responseTpl = '
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Data Type</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{ responseTableBody }}
+    </tbody>
+</table>';
+
+        static $reponseBodyTpl = '
+<tr>
+    <td>{{ name }}</td>
+    <td>{{ type }}</td>
+    <td>{{ desc }}</td>
+</tr>';
+
+    /**
+     * Generate the sample output
+     *
+     * @param  array   $st_params
+     * @param  integer $counter
+     * @return string
+     */
     private function generateSampleOutput($st_params, $counter)
     {
-        if (!isset($st_params['ApiReturn'])) {
+        if (!isset($st_params['ApiSampleResponse'])) {
             return 'NA';
         }
         $ret = array();
-        foreach ($st_params['ApiReturn'] as $params) {
+        foreach ($st_params['ApiSampleResponse'] as $params) {
             if (in_array($params['type'], array('object', 'array(object) ', 'array')) && isset($params['sample'])) {
                 $tr = array(
                     '{{ elt_id }}'      => $counter,
@@ -290,7 +356,7 @@ class Builder
                 <li class="active"><a href="#info{{ elt_id }}" data-toggle="tab">Info</a></li>
                 <li><a href="#sandbox{{ elt_id }}" data-toggle="tab">Sandbox</a></li>
                 <li><a href="#sample{{ elt_id }}" data-toggle="tab">Sample output</a></li>
-            </ul>-->
+            </ul> -->
 
             <!-- Tab panes -->
             <div class="tab-content">
@@ -300,15 +366,14 @@ class Builder
                     {{ description }}<br/><br/>
                     <hr>
 
-                    <h4>Reponse Classes</h4>
-                    <strong>Return value</strong><br/>
-                    <code class="prettyprint">Map { "meta": MetaObject, "response": ResponseObject }</code><br/><br/>
+                    <h4>Response Classes</h4>
+                    <pre class="prettyprint">
+{
+    "meta": metaObject,
+    "response": responseObject
+}</pre>
 
-                    <strong>MetaObject</strong><br/>
-                    {{ table_meta_object }}
-                    <br/>
-                    <strong>ResponseObject</strong><br/>
-                    {{ table_response_object }}
+                    {{ table_object_response }}
                     <br/>
                     <hr>
 
@@ -387,13 +452,11 @@ class Builder
                         </div>
                     </div>
                     <pre style="display:none;" class="prettyprint" id="response{{ elt_id }}"></pre>
-
-
-
-
                 </div><!-- #info -->
 
-                <-- <div class="tab-pane" id="sandbox{{ elt_id }}">
+
+
+                <div class="tab-pane" id="sandbox{{ elt_id }}">
                     <div class="row">
                         <div class="col-md-4">
                             Parameters
@@ -414,7 +477,7 @@ class Builder
                             {{ sample_response }}
                         </div>
                     </div>
-                </div><!-- #sample --> -->
+                </div><!-- #sample -->
 
             </div><!-- .tab-content -->
         </div>
