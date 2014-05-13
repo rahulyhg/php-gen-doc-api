@@ -11,6 +11,7 @@
     <style type="text/css">
         body      { padding-top: 70px; margin-bottom: 15px; }
         .tab-pane { padding-top: 10px; }
+        .required { font-size: 11px; color: #666666;}
         .mt0      { margin-top: 0px; }
         .footer   { font-size: 12px; color: #666; }
         .label    { display: inline-block; min-width: 65px; padding: 0.3em 0.6em 0.3em; }
@@ -77,7 +78,7 @@
 
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?skin=sons-of-obsidian&autoload=false"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
     <script src="https://google-code-prettify.googlecode.com/svn/trunk/src/prettify.js"></script>
     <script type="text/javascript">
     function syntaxHighlight(json) {
@@ -181,7 +182,12 @@
                 }
                 $('#response' + theId).show();
             }).error(function(xhr, textStatus, error) {
-                $('#response' + theId).html(textStatus);
+                if (typeof xhr.responseJSON === 'object') {
+                    $('#response' + theId).html(JSON.stringify(xhr.responseJSON, undefined, 4)).removeClass("prettyprinted");
+                    prettyPrint();
+                } else {
+                    $('#response' + theId).html(xhr.responseText);
+                }
                 $('#response' + theId).show();
             });
             return false;

@@ -168,7 +168,7 @@ class Builder
      * @param  array       $st_params
      * @return void|string
      */
-    private function generateParamsTemplate($id, $st_params)
+    private function generateParamsTemplate($counter, $st_params)
     {
         if (!isset($st_params['ApiParams']))
         {
@@ -180,7 +180,7 @@ class Builder
             $tr = array(
                 '{{ name }}'        => $params['name'],
                 '{{ type }}'        => $params['type'],
-                '{{ nullable }}'    => @$params['nullable'] == '1' ? 'No' : 'Yes',
+                '{{ nullable }}'    => @$params['nullable'] == '1' ? 'optional' : 'required',
                 '{{ description }}' => @$params['description'],
             );
             if (in_array($params['type'], array('object', 'array(object) ', 'array')) && isset($params['sample'])) {
@@ -189,7 +189,12 @@ class Builder
             $body[] = strtr(static::$paramContentTpl, $tr);
         }
 
-        return strtr(static::$paramTableTpl, array('{{ tbody }}' => implode(PHP_EOL, $body)));
+        return strtr(static::$paramTableTpl, array(
+            '{{ elt_id }}' => $counter,
+            '{{ method }}' => $st_params['ApiMethod'][0]['type'],
+            '{{ route }}'  => $st_params['ApiRoute'][0]['name'],
+            '{{ tbody }}' => implode(PHP_EOL, $body),
+        ));
     }
 
     /**
@@ -309,12 +314,49 @@ class Builder
 
 
                     <h4>Reponse Errors</h4>
-                    {{ table_status_code }}
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>HTTP Status Code</th>
+                                <th>Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>400</td>
+                                <td>Bad request</td>
+                            </tr>
+                            <tr>
+                                <td>401</td>
+                                <td>Unauthorized</td>
+                            </tr>
+                            <tr>
+                                <td>404</td>
+                                <td>Not Found</td>
+                            </tr>
+                            <tr>
+                                <td>405</td>
+                                <td>Method not allowed</td>
+                            </tr>
+                            <tr>
+                                <td>429</td>
+                                <td>Rate limit exceeded</td>
+                            </tr>
+                            <tr>
+                                <td>500</td>
+                                <td>Internal server error</td>
+                            </tr>
+                            <tr>
+                                <td>503</td>
+                                <td>Service unavailable</td>
+                            </tr>
+                        </tbody>
+                    </table>
                     <hr>
 
                     <h4>Path Parameters</h4>
                     {{ parameters }}
-                    {{ sandbox_form }}
+
                     <hr>
 
                     <div class="col-md-12" style="display:none;">
@@ -344,7 +386,7 @@ class Builder
                             <pre></pre>
                         </div>
                     </div>
-                    <pre style="display:none;" class="prettyprint linenums" id="response{{ elt_id }}"></pre>
+                    <pre style="display:none;" class="prettyprint" id="response{{ elt_id }}"></pre>
 
 
 
@@ -383,25 +425,32 @@ class Builder
 <pre id="sample_response{{ elt_id }}">{{ response }}</pre>';
 
         static $paramTableTpl = '
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Required</th>
-            <th>Description</th>
-        </tr>
-    </thead>
-    <tbody>
-        {{ tbody }}
-    </tbody>
-</table>';
+<form enctype="application/x-www-form-urlencoded" role="form" action="{{ route }}" method="{{ method }}" name="form{{ elt_id }}" id="form{{ elt_id }}">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Value</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ tbody }}
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-success send" rel="{{ elt_id }}">Send</button>
+</form>';
+
 
         static $paramContentTpl = '
 <tr>
-    <td>{{ name }}</td>
+    <td>
+        {{ name }}
+        <div class="required">{{ nullable }}</div>
+    </td>
+    <td><input type="text" class="form-control input-sm" id="{{ name }}" placeholder="{{ name }}" name="{{ name }}"></td>
     <td>{{ type }}</td>
-    <td>{{ nullable }}</td>
     <td>{{ description }}</td>
 </tr>';
 
