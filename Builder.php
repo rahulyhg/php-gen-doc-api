@@ -297,7 +297,7 @@ class Builder
 
                     <h4>Reponse Classes</h4>
                     <strong>Return value</strong><br/>
-                    <code>Map{ "meta": MetaObject, "response": ResponseObject }</code><br/><br/>
+                    <code class="prettyprint">Map { "meta": MetaObject, "response": ResponseObject }</code><br/><br/>
 
                     <strong>MetaObject</strong><br/>
                     {{ table_meta_object }}
@@ -344,7 +344,7 @@ class Builder
                             <pre></pre>
                         </div>
                     </div>
-                    <code id="response{{ elt_id }}"></code>
+                    <pre style="display:none;" class="prettyprint linenums" id="response{{ elt_id }}"></pre>
 
 
 

@@ -77,6 +77,8 @@
 
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?skin=sons-of-obsidian&autoload=false"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/trunk/src/prettify.js"></script>
     <script type="text/javascript">
     function syntaxHighlight(json) {
         if (typeof json != 'string') {
@@ -172,7 +174,8 @@
                 headers: st_headers
             }).done(function(data) {
                 if (typeof data === 'object') {
-                    $('#response' + theId).html(JSON.stringify(data));
+                    $('#response' + theId).html(JSON.stringify(data, undefined, 4)).removeClass("prettyprinted");
+                    prettyPrint();
                 } else {
                     $('#response' + theId).html(data);
                 }
