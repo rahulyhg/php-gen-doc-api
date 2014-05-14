@@ -156,8 +156,18 @@ class Builder
                 '{{ desc }}'   => $params['desc'],
             );
 
+            if (isset($params['link'])) {
+                $tr['{{ desc }}'].= ' '.strtr('See <a href="#{{ link }}_anchor_{{ elt_id }}">@{{ link }}</a>', array(
+                        '{{ elt_id }}' => $counter,
+                        '{{ link }}'   => $params['link'],
+                ));
+            }
+
             if (!in_array($params['section'], $sections)) {
-                $ret[] = strtr(static::$responseSectionTpl, array( '{{ section }}' => $params['section']));
+                $ret[] = strtr(static::$responseSectionTpl, array(
+                    '{{ elt_id }}'  => $counter,
+                    '{{ section }}' => $params['section'],
+                ));
                 array_push($sections, $params['section']);
             }
 
@@ -173,7 +183,7 @@ class Builder
     }
 
         static $responseSectionTpl = '
-<tr class="info"><th colspan="3"><i>{{ section }}</i></th></tr>';
+<tr class="info"><th colspan="3"><a class="anchor" id="{{ section }}_anchor_{{ elt_id }}"></a><i>{{ section }}</i></th></tr>';
 
         static $responseTpl = '
 <table class="table table-hover">
