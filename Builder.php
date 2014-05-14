@@ -121,6 +121,7 @@ class Builder
                     '{{ parameters }}'            => $this->generateParamsTemplate($counter, $docs),
                     '{{ sample_response }}'       => $this->generateSampleOutput($docs, $counter),
                     '{{ table_object_response }}' => $this->generateObjectResponse($docs, $counter),
+                    '{{ sample_root_object }}'    => $this->generateRootSample($docs),
                 );
                 $template[] = strtr(static::$mainTpl, $tr);
                 $counter++;
@@ -129,6 +130,22 @@ class Builder
         $this->saveTemplate(implode(PHP_EOL, $template), $this->_output_file);
 
         return true;
+    }
+
+    /**
+     * Generate the root sample JSON object
+     *
+     * @param  array   $st_params
+     * @param  integer $counter
+     * @return string
+     */
+    private function generateRootSample($st_params)
+    {
+        if (!isset($st_params['ApiReturnRootSample'][0])) {
+            return '';
+        }
+
+        return '<h5>Return JSON root object :</h5><pre class="sample_root_object prettyprint">'.$st_params['ApiReturnRootSample'][0]['sample'].'</pre>';
     }
 
     /**
@@ -349,11 +366,7 @@ class Builder
                     <hr>
 
                     <h4>Response Classes</h4>
-                    <pre class="prettyprint">
-{
-    "meta": metaObject,
-    "response": responseObject
-}</pre>
+                    {{ sample_root_object }}
 
                     {{ table_object_response }}
                     <br/>

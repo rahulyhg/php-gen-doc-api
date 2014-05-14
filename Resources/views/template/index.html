@@ -100,6 +100,11 @@
             $(this).html(str);
         });
 
+        $.each($('pre.sample_root_object'), function() {
+            var str = $(this).html().replace(/'/g, '"');
+            $(this).html(str);
+        });
+
         $("[data-toggle=popover]").popover({placement:'right'});
 
         $('body').on('shown.bs.popover', function() {
