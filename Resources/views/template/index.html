@@ -7,7 +7,8 @@
     <meta name="description" content="php-apidoc - apid documenation generator">
     <meta name="author" content="Calin Rada">
     <title>php-apidoc v {{ version }}</title>
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="http://jmblog.github.io/color-themes-for-google-code-prettify/css/themes/tomorrow-night-eighties.css" rel="stylesheet" type="text/css">
     <style type="text/css">
         body      { padding-top: 70px; margin-bottom: 15px; }
         tbody th  { text-align: center; }
@@ -75,7 +76,6 @@
 
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
     <script src="https://google-code-prettify.googlecode.com/svn/trunk/src/prettify.js"></script>
     <script type="text/javascript">
 
@@ -109,7 +109,6 @@
             }
             var str = JSON.stringify(JSON.parse(sample.html().replace(/'/g, '"')), undefined, 2);
             sample.html('<pre class="prettyprint">' + str + '</pre>');
-            prettyPrint();
         });
 
         $('body').on('click', '.send', function(e) {
@@ -182,6 +181,8 @@
 
             return false;
         });
+        // Beautify node with class "prettyprint"
+        prettyPrint();
     });
     </script>
 </body>
