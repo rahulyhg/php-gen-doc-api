@@ -69,15 +69,16 @@ class Builder
         return end($st_output);
     }
 
-    private function saveTemplate($data, $file)
+    private function saveTemplate($data, $anchorMenu, $file)
     {
         $template   = __DIR__.'/Resources/views/template/index.html';
         $oldContent = file_get_contents($template);
 
         $tr = array(
-            '{{ content }}' => $data,
-            '{{ date }}'    => date('Y-m-d, H:i:s'),
-            '{{ version }}' => static::VERSION,
+            '{{ content }}'     => $data,
+            '{{ anchor_menu }}' => $anchorMenu,
+            '{{ date }}'        => date('Y-m-d, H:i:s'),
+            '{{ version }}'     => static::VERSION,
         );
         $newContent = strtr($oldContent, $tr);
 
@@ -101,6 +102,7 @@ class Builder
         $st_annotations = $this->extractAnnotations();
 
         $template = array();
+        $anchorMenu = array();
         $counter = 0;
         $section = null;
 
@@ -108,7 +110,19 @@ class Builder
             foreach ($methods as $name => $docs) {
                 if (isset($docs['ApiDescription'][0]['section']) && $docs['ApiDescription'][0]['section'] !== $section) {
                     $section = $docs['ApiDescription'][0]['section'];
-                    $template[] = '<h2>'.$section.'</h2>';
+                    $template[] = strtr('<h2>{{ section }}<a class="anchor" id="{{ section }}_anchor_{{ elt_id }}"></a></h2>',
+                        array(
+                            '{{ elt_id }}'  => $counter,
+                            '{{ section }}' => $section,
+                        )
+                    );
+
+                    $anchorMenu[] = strtr('<a href="#{{ section }}_anchor_{{ elt_id }}">{{ section }}</a><br/>',
+                        array(
+                            '{{ elt_id }}'  => $counter,
+                            '{{ section }}' => $section,
+                        )
+                    );
                 }
                 if (0 === count($docs)) {
                     continue;
@@ -124,10 +138,15 @@ class Builder
                     '{{ sample_root_object }}'    => $this->generateRootSample($docs),
                 );
                 $template[] = strtr(static::$mainTpl, $tr);
+
+                // Create a anchor for each ApiReturnObject['section']
+                //$anchorMenu[] = $this->generateAnchorMenu($docs, $counter);
+
                 $counter++;
             }
         }
-        $this->saveTemplate(implode(PHP_EOL, $template), $this->_output_file);
+
+        $this->saveTemplate(implode(PHP_EOL, $template), implode(PHP_EOL, $anchorMenu), $this->_output_file);
 
         return true;
     }
@@ -146,6 +165,38 @@ class Builder
         }
 
         return '<h5>Return JSON root object :</h5><pre class="sample_root_object prettyprint">'.$st_params['ApiReturnRootSample'][0]['sample'].'</pre>';
+    }
+
+    /**
+     * Generate anchor menu item
+     *
+     * @param  array   $st_params
+     * @param  integer $counter
+     * @return string
+     */
+    private function generateAnchorMenu($st_params, $counter)
+    {
+        if (!isset($st_params['ApiReturnObject'][0])) {
+            return '';
+        }
+
+        $ret = array();
+        $sections = array();
+
+        foreach ($st_params['ApiReturnObject'] as $params) {
+
+            if (!in_array($params['section'], $sections)) {
+                $ret[] = strtr('&nbsp;&nbsp;&nbsp;<a href="#{{ section }}_anchor_{{ elt_id }}">{{ section }}</a><br/>',
+                    array(
+                        '{{ elt_id }}'  => $counter,
+                        '{{ section }}' => $params['section'],
+                    )
+                );
+                array_push($sections, $params['section']);
+            }
+        }
+
+        return implode(PHP_EOL, $ret);
     }
 
     /**
@@ -195,7 +246,6 @@ class Builder
 
         return strtr(static::$responseTpl, array(
             '{{ elt_id }}' => $counter,
-            '{{ section }}' => $st_params['ApiReturnObject'][0]['section'],
             '{{ responseTableBody }}' => implode(PHP_EOL, $ret),
         ));
     }
@@ -364,7 +414,7 @@ class Builder
             <!-- Tab panes -->
             <div class="tab-content">
 
-                <div class="tab-pane active" id="info{{ elt_id }}">
+                <div id="info{{ elt_id }}">
                     <h4>Implementation Notes</h4>
                     {{ description }}<br/><br/>
                     <hr>
@@ -452,13 +502,7 @@ class Builder
                     </div>
                 </div><!-- #info -->
 
-                <div class="tab-pane" id="sample{{ elt_id }}">
-                    <div class="row">
-                        <div class="col-md-12">
-                            {{ sample_response }}
-                        </div>
-                    </div>
-                </div><!-- #sample -->
+
 
             </div><!-- .tab-content -->
         </div>
