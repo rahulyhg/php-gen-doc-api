@@ -102,6 +102,8 @@ class Builder
         $counter = 0;
         $section = null;
 
+        $contentMainTpl = file_get_contents(__DIR__.'/Resources/views/partial/contentMain.html');
+
         foreach ($st_annotations as $class => $methods) {
             foreach ($methods as $name => $docs) {
                 if (isset($docs['ApiDescription'][0]['section']) && $docs['ApiDescription'][0]['section'] !== $section) {
@@ -133,7 +135,7 @@ class Builder
                     '{{ table_object_response }}' => $this->generateObjectResponse($docs, $counter),
                     '{{ sample_root_object }}'    => $this->generateRootSample($docs),
                 );
-                $template[] = strtr(static::$mainTpl, $tr);
+                $template[] = strtr($contentMainTpl, $tr);
 
                 // Create a anchor for each ApiReturnObject['section']
                 //$anchorMenu[] = $this->generateAnchorMenu($docs, $counter);
@@ -365,121 +367,6 @@ class Builder
     {
         return $this->generateTemplate();
     }
-
-    public static $mainTpl = '
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h4 class="panel-title">
-            {{ method }} <a data-toggle="collapse" data-parent="#accordion{{ elt_id }}" href="#collapseOne{{ elt_id }}"> {{ route }}</a>
-        </h4>
-    </div>
-    <div id="collapseOne{{ elt_id }}" class="panel-collapse collapse">
-        <div class="panel-body">
-
-            <!-- Nav tabs -->
-            <!-- <ul class="nav nav-tabs" id="php-apidoctab{{ elt_id }}">
-                <li class="active"><a href="#info{{ elt_id }}" data-toggle="tab">Info</a></li>
-                <li><a href="#sandbox{{ elt_id }}" data-toggle="tab">Sandbox</a></li>
-                <li><a href="#sample{{ elt_id }}" data-toggle="tab">Sample output</a></li>
-            </ul> -->
-
-            <!-- Tab panes -->
-            <div class="tab-content">
-
-                <div id="info{{ elt_id }}">
-                    <h4>Implementation Notes</h4>
-                    {{ description }}<br/><br/>
-                    <hr>
-
-                    <h4>Response Classes</h4>
-                    {{ sample_root_object }}
-
-                    {{ table_object_response }}
-                    <br/>
-                    <hr>
-
-
-                    <h4>Reponse Errors</h4>
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>HTTP Status Code</th>
-                                <th>Reason</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>400</td>
-                                <td>Bad request</td>
-                            </tr>
-                            <tr>
-                                <td>401</td>
-                                <td>Unauthorized</td>
-                            </tr>
-                            <tr>
-                                <td>404</td>
-                                <td>Not Found</td>
-                            </tr>
-                            <tr>
-                                <td>405</td>
-                                <td>Method not allowed</td>
-                            </tr>
-                            <tr>
-                                <td>429</td>
-                                <td>Rate limit exceeded</td>
-                            </tr>
-                            <tr>
-                                <td>500</td>
-                                <td>Internal server error</td>
-                            </tr>
-                            <tr>
-                                <td>503</td>
-                                <td>Service unavailable</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <hr>
-
-                    <h4>Path Parameters</h4>
-                    {{ parameters }}
-
-                    <hr>
-
-                    <div id="response_{{ elt_id }}" class="col-md-12" style="display:none;">
-
-                        <h4>Request URL</h4>
-                        <div id="request_url_{{ elt_id }}">
-                            <pre></pre>
-                        </div>
-
-                        <!-- <h4>Request Headers</h4>
-                        <div id="request_headers_{{ elt_id }}">
-                            <pre></pre>
-                        </div> -->
-
-                        <h4>Response Code</h4>
-                        <div id="response_code_{{ elt_id }}">
-                            <pre></pre>
-                        </div>
-
-                        <h4>Response Headers</h4>
-                        <div id="response_headers_{{ elt_id }}">
-                            <pre></pre>
-                        </div>
-
-                        <h4>Response Body</h4>
-                        <div id="response_body_{{ elt_id }}">
-                            <pre class="prettyprint"></pre>
-                        </div>
-                    </div>
-                </div><!-- #info -->
-
-
-
-            </div><!-- .tab-content -->
-        </div>
-    </div>
-</div>';
 
         static $sampleReponseTpl = '
 <pre id="sample_response{{ elt_id }}">{{ response }}</pre>';
