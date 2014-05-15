@@ -131,9 +131,9 @@ class Builder
                     '{{ route }}'                 => $docs['ApiRoute'][0]['name'],
                     '{{ description }}'           => $docs['ApiDescription'][0]['description'],
                     '{{ parameters }}'            => $this->generateParamsTemplate($counter, $docs),
-                    '{{ sample_response }}'       => $this->generateSampleOutput($docs, $counter),
                     '{{ table_object_response }}' => $this->generateResponseClasses($docs, $counter),
                     '{{ sample_root_object }}'    => $this->generateRootSample($docs),
+                    '{{ sample_response }}'       => $this->generateSampleOutput($docs, $counter),
                 );
                 $template[] = strtr($contentMainTpl, $tr);
 
@@ -296,6 +296,9 @@ class Builder
             return;
         }
 
+        $tableTpl = file_get_contents(__DIR__.'/Resources/views/partial/pathParameters/table.html');
+        $tBodyTpl = file_get_contents(__DIR__.'/Resources/views/partial/pathParameters/tBody.html');
+
         $body = array();
         foreach ($st_params['ApiParams'] as $params) {
             $tr = array(
@@ -307,10 +310,10 @@ class Builder
             if (in_array($params['type'], array('object', 'array(object) ', 'array')) && isset($params['sample'])) {
                 $tr['{{ type }}'].= ' '.strtr(static::$paramSampleBtnTpl, array('{{ sample }}' => $params['sample']));
             }
-            $body[] = strtr(static::$paramContentTpl, $tr);
+            $body[] = strtr($tBodyTpl, $tr);
         }
 
-        return strtr(static::$paramTableTpl, array(
+        return strtr($tableTpl, array(
             '{{ elt_id }}' => $counter,
             '{{ method }}' => $st_params['ApiMethod'][0]['type'],
             '{{ route }}'  => $st_params['ApiRoute'][0]['name'],
@@ -345,42 +348,12 @@ class Builder
         return $this->generateTemplate();
     }
 
-        static $sampleReponseTpl = '
-<pre id="sample_response{{ elt_id }}">{{ response }}</pre>';
-
-        static $paramTableTpl = '
-<form enctype="application/x-www-form-urlencoded" role="form" action="{{ route }}" method="{{ method }}" name="form{{ elt_id }}" id="form{{ elt_id }}">
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Value</th>
-                <th>Data Type</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{ tbody }}
-        </tbody>
-    </table>
-    <button type="submit" class="btn btn-danger send" rel="{{ elt_id }}">EXECUTE REQUEST</button>
-</form>';
-
-
-        static $paramContentTpl = '
-<tr>
-    <td>
-        {{ name }}
-        <div class="note">{{ nullable }}</div>
-    </td>
-    <td><input type="text" class="form-control input-sm" id="{{ name }}" placeholder="{{ name }}" name="{{ name }}"></td>
-    <td>{{ type }}</td>
-    <td>{{ description }}</td>
-</tr>';
-
         static $paramSampleBtnTpl = '
 <a href="javascript:void(0);" data-toggle="popover" data-placement="bottom" title="Sample object" data-content="{{ sample }}">
     <i class="btn glyphicon glyphicon-exclamation-sign"></i>
 </a>';
+
+    static $sampleReponseTpl = '
+<pre id="sample_response{{ elt_id }}">{{ response }}</pre>';
 
 }
