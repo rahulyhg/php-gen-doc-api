@@ -170,6 +170,7 @@ class Builder
                 '{{ elt_id }}' => $counter,
                 '{{ name }}'   => $params['name'],
                 '{{ type }}'   => $params['type'],
+                '{{ note }}'   => @$params['note'],
                 '{{ desc }}'   => $params['desc'],
             );
 
@@ -218,7 +219,10 @@ class Builder
 
         static $reponseBodyTpl = '
 <tr>
-    <td>{{ name }}</td>
+    <td>
+        {{ name }}
+        <div class="note">{{ note }}</div>
+    </td>
     <td>{{ type }}</td>
     <td>{{ desc }}</td>
 </tr>';
@@ -487,7 +491,7 @@ class Builder
 <tr>
     <td>
         {{ name }}
-        <div class="required">{{ nullable }}</div>
+        <div class="note">{{ nullable }}</div>
     </td>
     <td><input type="text" class="form-control input-sm" id="{{ name }}" placeholder="{{ name }}" name="{{ name }}"></td>
     <td>{{ type }}</td>
