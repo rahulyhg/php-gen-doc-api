@@ -132,7 +132,7 @@ class Builder
                     '{{ description }}'           => $docs['ApiDescription'][0]['description'],
                     '{{ parameters }}'            => $this->generateParamsTemplate($counter, $docs),
                     '{{ sample_response }}'       => $this->generateSampleOutput($docs, $counter),
-                    '{{ table_object_response }}' => $this->generateObjectResponse($docs, $counter),
+                    '{{ table_object_response }}' => $this->generateResponseClasses($docs, $counter),
                     '{{ sample_root_object }}'    => $this->generateRootSample($docs),
                 );
                 $template[] = strtr($contentMainTpl, $tr);
@@ -204,11 +204,15 @@ class Builder
      * @param  integer $counter
      * @return string
      */
-    private function generateObjectResponse($st_params, $counter)
+    private function generateResponseClasses($st_params, $counter)
     {
         if (!isset($st_params['ApiReturnObject'])) {
             return 'NA';
         }
+
+        $mainTpl = file_get_contents(__DIR__.'/Resources/views/partial/responseClasses/main.html');
+        $tHeaderTpl = file_get_contents(__DIR__.'/Resources/views/partial/responseClasses/tableHeaderSection.html');
+        $bodyTpl = file_get_contents(__DIR__.'/Resources/views/partial/responseClasses/body.html');
 
         $ret = array();
         $sections = array();
@@ -231,49 +235,22 @@ class Builder
             }
 
             if (!in_array($params['section'], $sections)) {
-                $ret[] = strtr(static::$responseSectionTpl, array(
+                $ret[] = strtr($tHeaderTpl, array(
                     '{{ elt_id }}'  => $counter,
                     '{{ section }}' => $params['section'],
                 ));
                 array_push($sections, $params['section']);
             }
 
-            $ret[] = strtr(static::$reponseBodyTpl, $tr);
+            $ret[] = strtr($bodyTpl, $tr);
         }
 
 
-        return strtr(static::$responseTpl, array(
+        return strtr($mainTpl, array(
             '{{ elt_id }}' => $counter,
             '{{ responseTableBody }}' => implode(PHP_EOL, $ret),
         ));
     }
-
-        static $responseSectionTpl = '
-<tr class="info"><th colspan="3"><a class="anchor" id="{{ section }}_anchor_{{ elt_id }}"></a><i>{{ section }}</i></th></tr>';
-
-        static $responseTpl = '
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Data Type</th>
-            <th>Description</th>
-        </tr>
-    </thead>
-    <tbody>
-        {{ responseTableBody }}
-    </tbody>
-</table>';
-
-        static $reponseBodyTpl = '
-<tr>
-    <td>
-        {{ name }}
-        <div class="note">{{ note }}</div>
-    </td>
-    <td>{{ type }}</td>
-    <td>{{ desc }}</td>
-</tr>';
 
     /**
      * Generate the sample output
