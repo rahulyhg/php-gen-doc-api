@@ -4,14 +4,10 @@
  */
 namespace Crada\Apidoc;
 
-use Crada\Apidoc\Extractor,
-    Crada\Apidoc\View,
-    Crada\Apidoc\View\JsonView,
-    Crada\Apidoc\Exception;
+use Crada\Apidoc\Extractor;
 
 /**
  * @license http://opensource.org/licenses/bsd-license.php The BSD License
- * @author  Calin Rada <rada.calin@gmail.com>
  */
 class Builder
 {
@@ -71,7 +67,7 @@ class Builder
 
     private function saveTemplate($data, $anchorMenu, $file)
     {
-        $template   = __DIR__.'/Resources/views/template/index.html';
+        $template   = __DIR__.'/Resources/views/layout.html';
         $oldContent = file_get_contents($template);
 
         $tr = array(
@@ -84,11 +80,11 @@ class Builder
 
         if (!is_dir($this->_output_dir)) {
             if (!mkdir($this->_output_dir)) {
-                throw new Exception('Cannot create directory');
+                throw new \Exception('Cannot create directory');
             }
         }
         if (!file_put_contents($this->_output_dir.'/'.$file, $newContent)) {
-            throw new Exception('Cannot save the content to '.$this->_output_dir);
+            throw new \Exception('Cannot save the content to '.$this->_output_dir);
         }
     }
 
@@ -360,30 +356,6 @@ class Builder
         );
 
         return '<span class="label '.$st_labels[$method].'">'.$method.'</span>';
-    }
-
-    /**
-     * Output the annotations in json format
-     *
-     * @return json
-     */
-    public function renderJson()
-    {
-        $st_annotations = $this->extractAnnotations();
-
-        $o_view = new JsonView();
-        $o_view->set('annotations', $st_annotations);
-        $o_view->render();
-    }
-
-    /**
-     * Output the annotations in json format
-     *
-     * @return array
-     */
-    public function renderArray()
-    {
-        return $this->extractAnnotations();
     }
 
     /**
