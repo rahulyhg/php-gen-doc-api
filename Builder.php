@@ -133,7 +133,6 @@ class Builder
                     '{{ parameters }}'            => $this->generateParamsTemplate($counter, $docs),
                     '{{ table_object_response }}' => $this->generateResponseClasses($docs, $counter),
                     '{{ sample_root_object }}'    => $this->generateRootSample($docs),
-                    '{{ sample_response }}'       => $this->generateSampleOutput($docs, $counter),
                 );
                 $template[] = strtr($contentMainTpl, $tr);
 
@@ -254,36 +253,6 @@ class Builder
     }
 
     /**
-     * Generate the sample output
-     *
-     * @param  array   $st_params
-     * @param  integer $counter
-     * @return string
-     */
-    private function generateSampleOutput($st_params, $counter)
-    {
-        if (!isset($st_params['ApiSampleResponse'])) {
-            return 'NA';
-        }
-        $ret = array();
-        foreach ($st_params['ApiSampleResponse'] as $params) {
-            if (in_array($params['type'], array('object', 'array(object) ', 'array')) && isset($params['sample'])) {
-                $tr = array(
-                    '{{ elt_id }}'      => $counter,
-                    '{{ response }}'    => $params['sample'],
-                    '{{ description }}' => '',
-                );
-                if (isset($params['description'])) {
-                    $tr['{{ description }}'] = $params['description'];
-                }
-                $ret[] = strtr(static::$sampleReponseTpl, $tr);
-            }
-        }
-
-        return implode(PHP_EOL, $ret);
-    }
-
-    /**
      * Generates the template for parameters
      *
      * @param  int         $id
@@ -349,8 +318,5 @@ class Builder
     {
         return $this->generateTemplate();
     }
-
-    static $sampleReponseTpl = '
-<pre id="sample_response{{ elt_id }}">{{ response }}</pre>';
 
 }
