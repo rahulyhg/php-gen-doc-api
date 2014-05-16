@@ -18,32 +18,50 @@ class Builder
      *
      * @var array
      */
-    private $_st_classes;
+    private $classes;
 
     /**
-     * Output directory for documentation
+     * Array options to define path directories
      *
-     * @var string
+     * @var array
      */
-    private $_output_dir;
-
-    /**
-     * Output filename for documentation
-     *
-     * @var string
-     */
-    private $_output_file;
+    private $options;
 
     /**
      * Constructor
      *
-     * @param array $st_classes
+     * @param array $classes
      */
-    public function __construct(array $st_classes, $s_output_dir, $s_output_file = 'index.html')
+    public function __construct(array $classes, $options = array())
     {
-        $this->_st_classes = $st_classes;
-        $this->_output_dir = $s_output_dir;
-        $this->_output_file = $s_output_file;
+        $this->classes = $classes;
+
+        $this->options = array_replace(
+            array(
+                'output_file'  => 'index.html',
+                'output_dir'   => __DIR__.'/web',
+                'template_dir' => __DIR__.'/Resources/views',
+                'asset_dir'    => __DIR__.'/Resources/assets',
+            ), $options
+        );
+    }
+
+    public function getTemplate($filePath)
+    {
+        if (!file_exists($file = $this->options['template_dir'].'/'.$filePath)) {
+            $file = __DIR__.'/Resources/views/'.$filePath;
+        }
+
+        return file_get_contents($file);
+    }
+
+    public function getAsset($filePath)
+    {
+        if (!file_exists($file = $this->options['asset_dir'].'/'.$filePath)) {
+            $file = __DIR__.'/Resources/assets/'.$filePath;
+        }
+
+        return file_get_contents($file);
     }
 
     /**
@@ -53,7 +71,7 @@ class Builder
      */
     private function extractAnnotations()
     {
-        foreach ($this->_st_classes as $class) {
+        foreach ($this->classes as $class) {
             $st_output[] = Extractor::getAllClassAnnotations($class);
         }
 
@@ -62,11 +80,10 @@ class Builder
 
     private function saveTemplate($data, $anchorMenu, $file)
     {
-        $template   = __DIR__.'/Resources/views/layout.html';
-        $oldContent = file_get_contents($template);
+        $oldContent = $this->getTemplate('layout.html');
 
-        $css = file_get_contents(__DIR__.'/Resources/assets/css.css');
-        $js  = file_get_contents(__DIR__.'/Resources/assets/js.js');
+        $css = $this->getAsset('css.css');
+        $js  = $this->getAsset('js.js');
 
         $tr = array(
             '{{ content }}'     => $data,
@@ -78,13 +95,13 @@ class Builder
         );
         $newContent = strtr($oldContent, $tr);
 
-        if (!is_dir($this->_output_dir)) {
-            if (!mkdir($this->_output_dir)) {
+        if (!is_dir($this->options['output_dir'])) {
+            if (!mkdir($this->options['output_dir'])) {
                 throw new \Exception('Cannot create directory');
             }
         }
-        if (!file_put_contents($this->_output_dir.'/'.$file, $newContent)) {
-            throw new \Exception('Cannot save the content to '.$this->_output_dir);
+        if (!file_put_contents($this->options['output_dir'].'/'.$file, $newContent)) {
+            throw new \Exception('Cannot save the content to '.$this->options['output_dir']);
         }
     }
 
@@ -102,11 +119,10 @@ class Builder
         $counter = 0;
         $section = null;
 
-        $contentMainTpl  = file_get_contents(__DIR__.'/Resources/views/content/contentMain.html');
-        $sectionTitleTpl = file_get_contents(__DIR__.'/Resources/views/content/sectionTitle.html');
+        $contentMainTpl  = $this->getTemplate('content/contentMain.html');
+        $sectionTitleTpl = $this->getTemplate('content/sectionTitle.html');
 
-        $anchorTpl = file_get_contents(__DIR__.'/Resources/views/menu/anchor.html');
-
+        $anchorTpl = $this->getTemplate('menu/anchor.html');
 
         foreach ($st_annotations as $class => $methods) {
             foreach ($methods as $name => $docs) {
@@ -143,7 +159,7 @@ class Builder
             }
         }
 
-        $this->saveTemplate(implode(PHP_EOL, $template), implode(PHP_EOL, $anchorMenu), $this->_output_file);
+        $this->saveTemplate(implode(PHP_EOL, $template), implode(PHP_EOL, $anchorMenu), $this->options['output_file']);
 
         return true;
     }
@@ -209,10 +225,10 @@ class Builder
             return 'NA';
         }
 
-        $mainTpl    = file_get_contents(__DIR__.'/Resources/views/content/responseClasses/main.html');
-        $tHeaderTpl = file_get_contents(__DIR__.'/Resources/views/content/responseClasses/tableHeaderSection.html');
-        $bodyTpl    = file_get_contents(__DIR__.'/Resources/views/content/responseClasses/body.html');
-        $linkTpl    = file_get_contents(__DIR__.'/Resources/views/content/responseClasses/link.html');
+        $mainTpl    = $this->getTemplate('content/responseClasses/main.html');
+        $tHeaderTpl = $this->getTemplate('content/responseClasses/tableHeaderSection.html');
+        $bodyTpl    = $this->getTemplate('content/responseClasses/body.html');
+        $linkTpl    = $this->getTemplate('content/responseClasses/link.html');
 
         $ret = array();
         $sections = array();
@@ -266,9 +282,9 @@ class Builder
             return;
         }
 
-        $tableTpl   = file_get_contents(__DIR__.'/Resources/views/content/pathParameters/table.html');
-        $tBodyTpl   = file_get_contents(__DIR__.'/Resources/views/content/pathParameters/tBody.html');
-        $popoverTpl = file_get_contents(__DIR__.'/Resources/views/content/pathParameters/popover.html');
+        $tableTpl   = $this->getTemplate('content/pathParameters/table.html');
+        $tBodyTpl   = $this->getTemplate('content/pathParameters/tBody.html');
+        $popoverTpl = $this->getTemplate('content/pathParameters/popover.html');
 
         $body = array();
         foreach ($st_params['ApiParams'] as $params) {

@@ -62,7 +62,7 @@ $(document).ready(function () {
         customHeaders[$('#apikey_key').val()] = $('#apikey_value').val();
 
         $.ajax({
-            url: $('#apiUrl').val() + urlForm,
+            url: urlForm,
             data: dataSerialize,
             type: '' + $(form).attr('method') + '',
             dataType: 'json',
