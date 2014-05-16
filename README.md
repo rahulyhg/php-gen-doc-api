@@ -1,4 +1,4 @@
-php-apidoc
+php-gen-doc-api
 ==========
 
 Generate documentation for php API based application. No dependency. No framework required.
@@ -25,7 +25,7 @@ The recommended installation is via compososer. Just add the following line to y
     ...
     "require": {
         ...
-        "crada/php-apidoc": "@dev"
+        "zckrs/php-gen-doc-api": "@dev"
     }
 }
 ```
@@ -71,23 +71,24 @@ class User
 }
 ```
 
-Create an apidoc.php file in your project root folder as follow:
+Create an genDocApi.php file in your project root folder as follow:
 
 
 ```php
-# apidoc.php
+# genDocApi.php
 <?php
 
-use Crada\Apidoc\Builder;
-use Crada\Apidoc\Exception;
+require __DIR__.'/vendor/autoload.php';
+
+use Zckrs\GenDocApi\Builder;
+use Zckrs\GenDocApi\Exception;
 
 $classes = array(
-    'Some\Namespace\User',
-    'Some\Namespace\OtherClass',
+    'Controller\GetController',
 );
 
-$output_dir = __DIR__.'/apidocs';
-$output_dir = 'api.html'; // defaults to index.html
+$output_dir = __DIR__.'/web/docs';
+$output_file = 'index.html';
 
 try {
     $builder = new Builder($classes, $output_dir, $output_file);
@@ -101,7 +102,7 @@ try {
 Then, execute it via CLI
 
 ```php
-$ php apidoc.php
+$ php genDocApi.php
 ```
 
 ### <a id="methods"></a>Available Methods
@@ -116,7 +117,7 @@ Here is the list of methods available so far :
 
 ### <a id="preview"></a>Preview
 
-You can see a dummy generated documentation on http://calinrada.github.io/php-apidoc/
+You can see a dummy generated documentation on http://zckrs.github.io/php-gen-doc-api/
 
 ### <a id="tips"></a>Tips
 

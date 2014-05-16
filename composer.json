@@ -1,30 +1,18 @@
 {
-    "name": "crada/php-apidoc",
+    "name": "zckrs/php-gen-doc-api",
     "type": "library",
     "description": "Generate documentation for php API based application. No dependency. No framework required.",
-    "keywords": ["php","api","documentation","generator"],
-    "homepage": "https://github.com/calinrada/php-apidoc",
+    "keywords": ["php", "api", "documentation", "generator", "agnostic"],
+    "homepage": "https://github.com/zckrs/php-gen-doc-api",
     "license": "MIT",
     "authors": [
         {
-            "name": "Calin Rada",
-            "email": "rada.calin@gmail.com"
-        }, {
-            "name": "Kevin Saliou",
-            "email": "kevin@saliou.name"
+            "name": "Mehdy Dara",
+            "email": "mdara@eleven-labs.com"
         }
     ],
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.2"
-    },
-    "autoload": {
-        "psr-0": { "Crada": "" }
-    },
-    "target-dir": "Crada/Apidoc",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.3-dev"
-        }
     }
 }

@@ -1,14 +1,9 @@
 <?php
-/**
- * This file is part of the php-apidoc package.
- */
-namespace Crada\Apidoc;
 
-use Crada\Apidoc\Extractor;
+namespace Zckrs\GenDocApi;
 
-/**
- * @license http://opensource.org/licenses/bsd-license.php The BSD License
- */
+use Zckrs\GenDocApi\Extractor;
+
 class Builder
 {
     /**
@@ -16,7 +11,7 @@ class Builder
      *
      * @var string
      */
-    const VERSION = '1.3.4';
+    const VERSION = '1.4';
 
     /**
      * Classes collection

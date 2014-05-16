@@ -1,15 +1,10 @@
 <?php
-/**
- * This file is part of the php-apidoc package.
- */
-namespace Crada\Apidoc;
 
-use Crada\Apidoc\Exception;
+namespace Zckrs\GenDocApi;
 
 /**
  * Class imported from https://github.com/eriknyk/Annotations
  *
- * @license http://opensource.org/licenses/bsd-license.php The BSD License
  */
 class Extractor
 {
@@ -133,7 +128,7 @@ class Extractor
             // if not, just skip the annotation instance creation.
             if (! class_exists($class)) {
                 if ($this->strict) {
-                    throw new Exception(sprintf('Runtime Error: Annotation Class Not Found: %s', $class));
+                    throw new \Exception(sprintf('Runtime Error: Annotation Class Not Found: %s', $class));
                 } else {
                     // silent skip & continue
                     continue;
@@ -231,7 +226,7 @@ class Extractor
                 } else {
                     // close delimiter
                     if ($c !== $nextDelimiter) {
-                        throw new Exception(sprintf(
+                        throw new \Exception(sprintf(
                             "Parse Error: enclosing error -> expected: [%s], given: [%s]",
                             $nextDelimiter, $c
                         ));
@@ -240,7 +235,7 @@ class Extractor
                     // validating sintax
                     if ($i < $len) {
                         if (',' !== substr($content, $i, 1)) {
-                            throw new Exception(sprintf(
+                            throw new \Exception(sprintf(
                                 "Parse Error: missing comma separator near: ...%s<--",
                                 substr($content, ($i-10), $i)
                             ));
@@ -266,7 +261,7 @@ class Extractor
                         // If composing flag is true yet,
                         // it means that the string was not enclosed, so it is parsing error.
                         if ($composing === true && !empty($prevDelimiter) && !empty($nextDelimiter)) {
-                            throw new Exception(sprintf(
+                            throw new \Exception(sprintf(
                                 "Parse Error: enclosing error -> expected: [%s], given: [%s]",
                                 $nextDelimiter, $c
                             ));
@@ -282,7 +277,7 @@ class Extractor
                             $c = substr($content, $i++, 1);
 
                             if (isset($delimiter) && $c === $delimiter) {
-                                throw new Exception(sprintf(
+                                throw new \Exception(sprintf(
                                     "Parse Error: Composite variable is not enclosed correctly."
                                 ));
                             }
@@ -296,7 +291,7 @@ class Extractor
 
                         // if the string is composing yet means that the structure of var. never was enclosed with '}'
                         if ($subComposing) {
-                            throw new Exception(sprintf(
+                            throw new \Exception(sprintf(
                                 "Parse Error: Composite variable is not enclosed correctly. near: ...%s'",
                                 $subc
                             ));

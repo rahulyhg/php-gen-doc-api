@@ -1,22 +1,7 @@
 $(document).ready(function () {
 
-    $('#php-apidoctab a').click(function (e) {
-        e.preventDefault()
-        $(this).tab('show')
-    });
-
     $('.tooltipP').tooltip({
         placement: 'bottom'
-    });
-
-    $('code[id^=response]').hide();
-
-    $.each($('pre[id^=sample_response]'), function () {
-        if ($(this).html() == 'NA') {
-            return;
-        }
-        var str = JSON.stringify(JSON.parse($(this).html().replace(/'/g, '"')), undefined, 4);
-        $(this).html(str);
     });
 
     $.each($('pre.sample_root_object'), function () {
@@ -30,7 +15,6 @@ $(document).ready(function () {
 
     $('body').on('shown.bs.popover', function () {
         var sample = $(this).find(".popover-content");
-        console.log(sample);
         var str = '';
 
         try {
@@ -74,14 +58,15 @@ $(document).ready(function () {
             }
         });
 
-        var st_headers = {};
-        st_headers[$('#apikey_key').val()] = $('#apikey_value').val();
+        var customHeaders = {};
+        customHeaders[$('#apikey_key').val()] = $('#apikey_value').val();
+
         $.ajax({
             url: $('#apiUrl').val() + urlForm,
             data: dataSerialize,
             type: '' + $(form).attr('method') + '',
             dataType: 'json',
-            headers: st_headers,
+            headers: customHeaders,
             success: function (data, textStatus, jqXHR) {
                 if (typeof data === 'object') {
                     $('#response' + theId).html(JSON.stringify(data, undefined, 4)).removeClass("prettyprinted");
