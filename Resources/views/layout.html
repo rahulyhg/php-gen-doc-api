@@ -120,11 +120,16 @@
 
         $('body').on('shown.bs.popover', function() {
             var sample = $(this).find(".popover-content");
-            if (sample.html() == 'NA') {
-                return;
+            console.log(sample);
+            var str = '';
+
+            try {
+                str = JSON.stringify(JSON.parse(sample.html().replace(/'/g, '"')), undefined, 2);
+            } catch (e) {
+                str = sample.html();
             }
-            var str = JSON.stringify(JSON.parse(sample.html().replace(/'/g, '"')), undefined, 2);
             sample.html('<pre class="prettyprint">' + str + '</pre>');
+            prettyPrint();
         });
 
         $('body').on('click', '.send', function(e) {

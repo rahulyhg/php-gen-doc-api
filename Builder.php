@@ -102,25 +102,25 @@ class Builder
         $counter = 0;
         $section = null;
 
-        $contentMainTpl = file_get_contents(__DIR__.'/Resources/views/partial/contentMain.html');
+        $contentMainTpl  = file_get_contents(__DIR__.'/Resources/views/content/contentMain.html');
+        $sectionTitleTpl = file_get_contents(__DIR__.'/Resources/views/content/sectionTitle.html');
+
+        $anchorTpl = file_get_contents(__DIR__.'/Resources/views/menu/anchor.html');
+
 
         foreach ($st_annotations as $class => $methods) {
             foreach ($methods as $name => $docs) {
                 if (isset($docs['ApiDescription'][0]['section']) && $docs['ApiDescription'][0]['section'] !== $section) {
                     $section = $docs['ApiDescription'][0]['section'];
-                    $template[] = strtr('<h2>{{ section }}<a class="anchor" id="{{ section }}_anchor_{{ elt_id }}"></a></h2>',
-                        array(
-                            '{{ elt_id }}'  => $counter,
-                            '{{ section }}' => $section,
-                        )
-                    );
+                    $template[] = strtr($sectionTitleTpl, array(
+                        '{{ elt_id }}'  => $counter,
+                        '{{ section }}' => $section,
+                    ));
 
-                    $anchorMenu[] = strtr('<a href="#{{ section }}_anchor_{{ elt_id }}">{{ section }}</a><br/>',
-                        array(
-                            '{{ elt_id }}'  => $counter,
-                            '{{ section }}' => $section,
-                        )
-                    );
+                    $anchorMenu[] = strtr($anchorTpl, array(
+                        '{{ elt_id }}'  => $counter,
+                        '{{ section }}' => $section,
+                    ));
                 }
                 if (0 === count($docs)) {
                     continue;
@@ -210,9 +210,10 @@ class Builder
             return 'NA';
         }
 
-        $mainTpl = file_get_contents(__DIR__.'/Resources/views/partial/responseClasses/main.html');
-        $tHeaderTpl = file_get_contents(__DIR__.'/Resources/views/partial/responseClasses/tableHeaderSection.html');
-        $bodyTpl = file_get_contents(__DIR__.'/Resources/views/partial/responseClasses/body.html');
+        $mainTpl    = file_get_contents(__DIR__.'/Resources/views/content/responseClasses/main.html');
+        $tHeaderTpl = file_get_contents(__DIR__.'/Resources/views/content/responseClasses/tableHeaderSection.html');
+        $bodyTpl    = file_get_contents(__DIR__.'/Resources/views/content/responseClasses/body.html');
+        $linkTpl    = file_get_contents(__DIR__.'/Resources/views/content/responseClasses/link.html');
 
         $ret = array();
         $sections = array();
@@ -228,9 +229,9 @@ class Builder
             );
 
             if (isset($params['link'])) {
-                $tr['{{ desc }}'].= ' '.strtr('See <a href="#{{ link }}_anchor_{{ elt_id }}">@{{ link }}</a>', array(
-                        '{{ elt_id }}' => $counter,
-                        '{{ link }}'   => $params['link'],
+                $tr['{{ desc }}'] .= ' '.strtr($linkTpl, array(
+                    '{{ elt_id }}' => $counter,
+                    '{{ link }}'   => $params['link'],
                 ));
             }
 
@@ -296,8 +297,9 @@ class Builder
             return;
         }
 
-        $tableTpl = file_get_contents(__DIR__.'/Resources/views/partial/pathParameters/table.html');
-        $tBodyTpl = file_get_contents(__DIR__.'/Resources/views/partial/pathParameters/tBody.html');
+        $tableTpl   = file_get_contents(__DIR__.'/Resources/views/content/pathParameters/table.html');
+        $tBodyTpl   = file_get_contents(__DIR__.'/Resources/views/content/pathParameters/tBody.html');
+        $popoverTpl = file_get_contents(__DIR__.'/Resources/views/content/pathParameters/popover.html');
 
         $body = array();
         foreach ($st_params['ApiParams'] as $params) {
@@ -307,8 +309,8 @@ class Builder
                 '{{ nullable }}'    => @$params['nullable'] == '1' ? 'optional' : 'required',
                 '{{ description }}' => @$params['description'],
             );
-            if (in_array($params['type'], array('object', 'array(object) ', 'array')) && isset($params['sample'])) {
-                $tr['{{ type }}'].= ' '.strtr(static::$paramSampleBtnTpl, array('{{ sample }}' => $params['sample']));
+            if (isset($params['sample'])) {
+                $tr['{{ type }}'].= ' '.strtr($popoverTpl, array('{{ sample }}' => $params['sample']));
             }
             $body[] = strtr($tBodyTpl, $tr);
         }
@@ -347,11 +349,6 @@ class Builder
     {
         return $this->generateTemplate();
     }
-
-        static $paramSampleBtnTpl = '
-<a href="javascript:void(0);" data-toggle="popover" data-placement="bottom" title="Sample object" data-content="{{ sample }}">
-    <i class="btn glyphicon glyphicon-exclamation-sign"></i>
-</a>';
 
     static $sampleReponseTpl = '
 <pre id="sample_response{{ elt_id }}">{{ response }}</pre>';
