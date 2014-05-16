@@ -70,11 +70,16 @@ class Builder
         $template   = __DIR__.'/Resources/views/layout.html';
         $oldContent = file_get_contents($template);
 
+        $css = file_get_contents(__DIR__.'/Resources/assets/css.css');
+        $js  = file_get_contents(__DIR__.'/Resources/assets/js.js');
+
         $tr = array(
             '{{ content }}'     => $data,
             '{{ anchor_menu }}' => $anchorMenu,
             '{{ date }}'        => date('Y-m-d, H:i:s'),
             '{{ version }}'     => static::VERSION,
+            '{{ css }}'         => $css,
+            '{{ js }}'          => $js,
         );
         $newContent = strtr($oldContent, $tr);
 
