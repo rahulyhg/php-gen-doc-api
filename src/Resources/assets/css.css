@@ -21,12 +21,6 @@ th a.anchor {
     visibility: hidden;
 }
 
-#anchorMenu {
-    width: 160px;
-    background-color: #f4f4f4;
-    margin-top: 20px;
-}
-
 #anchorMenu a {
     padding: 10px;
 }
