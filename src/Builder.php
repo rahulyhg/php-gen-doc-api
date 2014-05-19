@@ -39,7 +39,7 @@ class Builder
         $this->options = array_replace(
             array(
                 'output_file'  => 'index.html',
-                'output_dir'   => __DIR__.'/web',
+                'output_dir'   => __DIR__.'/../web',
                 'template_dir' => __DIR__.'/Resources/views',
                 'asset_dir'    => __DIR__.'/Resources/assets',
             ), $options
