@@ -44,25 +44,26 @@
 
     <div class="container">
 
-        <div class="panel-group">
+        <div class="row">
             <div class="col-md-2" >
                 <div id="anchorMenu" data-spy="affix" data-offset-top="35">
+                    <h4>Ressources</h4>
                     {{ anchor_menu }}
                 </div>
             </div>
 
-            <div class="panel-group col-md-10" id="accordion">
+            <div class="col-md-10">
                 {{ content }}
             </div>
         </div>
 
         <hr>
 
-        <div class="row mt0 footer">
-            <div class="col-md-6" align="left">
+        <div class="row footer">
+            <div class="col-md-6">
                 Generated on {{ date }}
             </div>
-            <div class="col-md-6" align="right">
+            <div class="col-md-6 text-right">
                 <a href="https://github.com/zckrs/php-gen-doc-api" target="_blank">php-gen-doc-api v{{ version }}</a>
             </div>
         </div>
