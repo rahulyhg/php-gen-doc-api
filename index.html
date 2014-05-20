@@ -1,314 +1,408 @@
-<!doctype html>
-<html>
-  <head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Php-gen-doc-api by zckrs</title>
-
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1 class="header">Php-gen-doc-api</h1>
-        <p class="header">Generate documentation for php API based application. No dependency. No framework required.</p>
-
-        <ul>
-          <li class="download"><a class="buttons" href="https://github.com/zckrs/php-gen-doc-api/zipball/master">Download ZIP</a></li>
-          <li class="download"><a class="buttons" href="https://github.com/zckrs/php-gen-doc-api/tarball/master">Download TAR</a></li>
-          <li><a class="buttons github" href="https://github.com/zckrs/php-gen-doc-api">View On GitHub</a></li>
-        </ul>
-
-        <p class="header">This project is maintained by <a class="header name" href="https://github.com/zckrs">zckrs</a></p>
-
-
-      </header>
-      <section>
-        <h1>
-<a name="php-gen-doc-api-" class="anchor" href="#php-gen-doc-api-"><span class="octicon octicon-link"></span></a>php-gen-doc-api <a href="https://travis-ci.org/zckrs/php-gen-doc-api"><img src="https://travis-ci.org/zckrs/php-gen-doc-api.svg?branch=master" alt="Build Status"></a>
-</h1>
-
-<p>Generate documentation for php API based application. No dependency. No framework required.</p>
-
-<ul>
-<li><a href="#preview">Preview</a></li>
-<li><a href="#requirements">Requirements</a></li>
-<li><a href="#installation">Installation</a></li>
-<li><a href="#usage">Usage</a></li>
-<li><a href="#options">Options</a></li>
-<li><a href="#annotations">Annotations</a></li>
-<li><a href="#custom-output-html">Custom output html</a></li>
-<li><a href="#known-issues">Known issues</a></li>
-<li><a href="#acknowledgment">Acknowledgment</a></li>
-</ul><h3>
-<a name="preview" class="anchor" href="#preview"><span class="octicon octicon-link"></span></a>Preview</h3>
-
-<h3>
-<a name="requirements" class="anchor" href="#requirements"><span class="octicon octicon-link"></span></a>Requirements</h3>
-
-<p>You just need <code>PHP &gt;= 5.3.2</code>.</p>
-
-<h3>
-<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h3>
-
-<p>The recommended installation is via compososer. Just add the following line to your composer.json:</p>
-
-<div class="highlight highlight-json"><pre><span class="p">{</span>
-    <span class="err">...</span>
-    <span class="nt">"require"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="err">...</span>
-        <span class="nt">"zckrs/php-gen-doc-api"</span><span class="p">:</span> <span class="s2">"@dev"</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-
-<div class="highlight highlight-bash"><pre><span class="nv">$ </span>php composer.phar update
-</pre></div>
-
-<h3>
-<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h3>
-
-<h6>
-<a name="create-an-gendocapiphp-file-in-your-project-root-folder-as-follow-" class="anchor" href="#create-an-gendocapiphp-file-in-your-project-root-folder-as-follow-"><span class="octicon octicon-link"></span></a>Create an genDocApi.php file in your project root folder as follow :</h6>
-
-<div class="highlight highlight-php"><pre><span class="o">&lt;?</span><span class="nx">php</span>
-
-<span class="c1">// Use autoload</span>
-<span class="k">require</span> <span class="nx">__DIR__</span><span class="o">.</span><span class="s1">'/../../autoload.php'</span><span class="p">;</span>
-
-<span class="c1">// Or include classes</span>
-<span class="c1">// require_once(__DIR__.'/src/Builder.php');</span>
-<span class="c1">// require_once(__DIR__.'/src/Extractor.php');</span>
-<span class="c1">// require_once(__DIR__.'/example/User.php');</span>
-<span class="c1">// require_once(__DIR__.'/example/Document.php');</span>
-
-<span class="k">use</span> <span class="nx">Zckrs\GenDocApi\Builder</span><span class="p">;</span>
-
-<span class="nv">$classes</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
-    <span class="s1">'Controller\GetController'</span><span class="p">,</span>
-<span class="p">);</span>
-
-<span class="k">try</span> <span class="p">{</span>
-    <span class="nv">$builder</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Builder</span><span class="p">(</span><span class="nv">$classes</span><span class="p">,</span>
-        <span class="k">array</span><span class="p">(</span>
-            <span class="s1">'output_file'</span>  <span class="o">=&gt;</span> <span class="s1">'index.html'</span><span class="p">,</span>
-            <span class="s1">'output_dir'</span>   <span class="o">=&gt;</span> <span class="nx">__DIR__</span><span class="o">.</span><span class="s1">'/../web'</span><span class="p">,</span>
-            <span class="s1">'template_dir'</span> <span class="o">=&gt;</span> <span class="nx">__DIR__</span><span class="o">.</span><span class="s1">'/Resources/views'</span><span class="p">,</span>
-            <span class="s1">'asset_dir'</span>    <span class="o">=&gt;</span> <span class="nx">__DIR__</span><span class="o">.</span><span class="s1">'/Resources/assets'</span><span class="p">,</span>
-        <span class="p">)</span>
-    <span class="p">);</span>
-    <span class="nv">$builder</span><span class="o">-&gt;</span><span class="na">generate</span><span class="p">();</span>
-<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">\Exception</span> <span class="nv">$e</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">echo</span> <span class="s1">'There are an error when generating the documentation : '</span><span class="p">,</span> <span class="nv">$e</span><span class="o">-&gt;</span><span class="na">getMessage</span><span class="p">();</span>
-<span class="p">}</span>
-
-</pre></div>
-
-<h5>
-<a name="then-execute-it-via-cli-" class="anchor" href="#then-execute-it-via-cli-"><span class="octicon octicon-link"></span></a>Then, execute it via CLI :</h5>
-
-<div class="highlight highlight-php"><pre><span class="err">$</span> <span class="nx">php</span> <span class="nx">genDocApi</span><span class="o">.</span><span class="nx">php</span>
-</pre></div>
-
-<h3>
-<a name="options" class="anchor" href="#options"><span class="octicon octicon-link"></span></a>Options</h3>
-
-<h5>
-<a name="output_file" class="anchor" href="#output_file"><span class="octicon octicon-link"></span></a><strong>output_file</strong>
-</h5>
-
-<p>The name of the generated file (default : <code>index.html</code>).</p>
-
-<h5>
-<a name="output_dir" class="anchor" href="#output_dir"><span class="octicon octicon-link"></span></a><strong>output_dir</strong>
-</h5>
-
-<p>The directory to store the html file (default : <code>/web</code>).</p>
-
-<h5>
-<a name="template_dir" class="anchor" href="#template_dir"><span class="octicon octicon-link"></span></a><strong>template_dir</strong>
-</h5>
-
-<p>The directory to store the views (default : <code>/src/Resources/views</code>).
-You can override each view. See <a href="#extend">how to extend output HTML</a></p>
-
-<h5>
-<a name="asset_dir" class="anchor" href="#asset_dir"><span class="octicon octicon-link"></span></a><strong>asset_dir</strong>
-</h5>
-
-<p>The directory to store the assets (default : <code>/src/Resources/assets</code>).
-You can override each asset. See <a href="#extend">how to extend output HTML</a></p>
-
-<h3>
-<a name="annotations" class="anchor" href="#annotations"><span class="octicon octicon-link"></span></a>Annotations</h3>
-
-<p>Here is the list of annotations available so far :</p>
-
-<h5>
-<a name="apidescriptionsection-description" class="anchor" href="#apidescriptionsection-description"><span class="octicon octicon-link"></span></a><strong>@ApiDescription(section="...", description="...")</strong>
-</h5>
-
-<p><em>Argument :</em></p>
-
-<p><code>section</code> : section which stores the method documentation
-<code>description</code> : description of the method</p>
-
-<p><em>Example :</em></p>
-
-<div class="highlight highlight-php"><pre>    <span class="sd">/**</span>
-<span class="sd">     * @ApiDescription(section="User", description="Get information about user")</span>
-<span class="sd">     */</span>
-    <span class="k">public</span> <span class="k">function</span> <span class="nf">getUser</span><span class="p">()</span> <span class="p">{}</span>
-
-    <span class="sd">/**</span>
-<span class="sd">     * @ApiDescription(section="Document", description="Get a document")</span>
-<span class="sd">     */</span>
-    <span class="k">public</span> <span class="k">function</span> <span class="nf">getDocument</span><span class="p">()</span> <span class="p">{}</span>
-</pre></div>
-
-<h5>
-<a name="apimethodtypegetpostputdelete" class="anchor" href="#apimethodtypegetpostputdelete"><span class="octicon octicon-link"></span></a><strong>@ApiMethod(type="(get|post|put|delete")</strong>
-</h5>
-
-<p><em>Argument :</em></p>
-
-<p><code>type</code> : type of HTTP request</p>
-
-<p><em>Example :</em></p>
-
-<div class="highlight highlight-php"><pre>    <span class="sd">/**</span>
-<span class="sd">     * @ApiMethod(type="GET")</span>
-<span class="sd">     */</span>
-    <span class="k">public</span> <span class="k">function</span> <span class="nf">getUser</span><span class="p">()</span> <span class="p">{}</span>
-</pre></div>
-
-<h5>
-<a name="apiroutename" class="anchor" href="#apiroutename"><span class="octicon octicon-link"></span></a><strong>@ApiRoute(name="...")</strong>
-</h5>
-
-<p><em>Argument :</em></p>
-
-<p><code>route</code> : url to call api</p>
-
-<p><em>Example :</em></p>
-
-<div class="highlight highlight-php"><pre>    <span class="sd">/**</span>
-<span class="sd">     * @ApiRoute(name="/document/get/{id}")</span>
-<span class="sd">     */</span>
-    <span class="k">public</span> <span class="k">function</span> <span class="nf">getDocument</span><span class="p">()</span> <span class="p">{}</span>
-</pre></div>
-
-<h5>
-<a name="apiparamsname-type-nullabletruefalse-description-sample" class="anchor" href="#apiparamsname-type-nullabletruefalse-description-sample"><span class="octicon octicon-link"></span></a><strong>@ApiParams(name="...", type="...", nullable=(true|false), description="...", sample="...")</strong>
-</h5>
-
-<p><em>Argument :</em></p>
-
-<p><code>name</code> : name of param</p>
-
-<p><code>type</code> : primitive types</p>
-
-<p><code>nullable</code> : param is required or not</p>
-
-<p><code>description</code> : a short description</p>
-
-<p><code>sample</code> : example value</p>
-
-<p><em>Example :</em></p>
-
-<div class="highlight highlight-php"><pre>    <span class="sd">/**</span>
-<span class="sd">     * @ApiParams(name="id", type="integer", nullable=false, description="Unique ID document", sample="123456")</span>
-<span class="sd">     */</span>
-    <span class="k">public</span> <span class="k">function</span> <span class="nf">getDocument</span><span class="p">()</span> <span class="p">{}</span>
-</pre></div>
-
-<h5>
-<a name="apireturnrootsamplesample--" class="anchor" href="#apireturnrootsamplesample--"><span class="octicon octicon-link"></span></a><strong>@ApiReturnRootSample(sample="{ ... }")</strong>
-</h5>
-
-<p><em>Argument :</em></p>
-
-<p><code>sample</code> : describes format of root JSON node (use simple quote in JSON sample)</p>
-
-<p><em>Example :</em></p>
-
-<div class="highlight highlight-php"><pre>    <span class="sd">/**</span>
-<span class="sd">     * @ApiReturnRootSample(sample="{ 'documentID': documentObject }")</span>
-<span class="sd">     */</span>
-    <span class="k">public</span> <span class="k">function</span> <span class="nf">getDocument</span><span class="p">()</span> <span class="p">{}</span>
-</pre></div>
-
-<h5>
-<a name="apireturnobjectsection-name-type-desc-note-link" class="anchor" href="#apireturnobjectsection-name-type-desc-note-link"><span class="octicon octicon-link"></span></a><strong>@ApiReturnObject(section="...", name="...", type="...", desc="...", note="...", link="...")</strong>
-</h5>
-
-<p><em>Argument :</em></p>
-
-<p><code>section</code> : property describes belongs to section</p>
-
-<p><code>name</code> : name of property</p>
-
-<p><code>type</code> : primitive type</p>
-
-<p><code>desc</code> : a short description</p>
-
-<p><code>note</code> : define a note for user</p>
-
-<p><code>link</code> : create a anchor link to another section</p>
-
-<p><em>Example :</em></p>
-
-<div class="highlight highlight-php"><pre>    <span class="sd">/**</span>
-<span class="sd">     * @ApiReturnObject(section="documentObject", name="title", type="string", desc="Title of document.")</span>
-<span class="sd">     * @ApiReturnObject(section="documentObject", name="authors", type="array", desc="A array of authors.", note="Exist if not empty", link="authorObject")</span>
-<span class="sd">     *</span>
-<span class="sd">     * @ApiReturnObject(section="authorObject", name="id", type="integer", desc="ID author.")</span>
-<span class="sd">     * @ApiReturnObject(section="authorObject", name="username", type="string", desc="Username author.")</span>
-<span class="sd">     */</span>
-    <span class="k">public</span> <span class="k">function</span> <span class="nf">getDocument</span><span class="p">()</span> <span class="p">{}</span>
-</pre></div>
-
-<h3>
-<a name="custom-output-html" class="anchor" href="#custom-output-html"><span class="octicon octicon-link"></span></a>Custom output HTML</h3>
-
-<h5>
-<a name="what-includes-in-default-layout-" class="anchor" href="#what-includes-in-default-layout-"><span class="octicon octicon-link"></span></a>What includes in default layout :</h5>
-
-<ul>
-<li>Bootstrap v3.1.1</li>
-<li>jQuery v1.10.2</li>
-<li>Google Code Prettify</li>
-</ul><h5>
-<a name="how-to-custom" class="anchor" href="#how-to-custom"><span class="octicon octicon-link"></span></a>How to custom:</h5>
-
-<ol>
-<li>Create a main directory for views.</li>
-<li>Define <code>template_dir</code> in <code>genDocApi.php</code>.</li>
-<li>Put custom view with same model tree. <a href="https://github.com/zckrs/php-gen-doc-api/wiki/Details--views">details</a>
-</li>
-<li>Each view contains some <code>{{ variables }}</code>
-</li>
-</ol><h3>
-<a name="known-issues" class="anchor" href="#known-issues"><span class="octicon octicon-link"></span></a>Known issues</h3>
-
-<p>If you have some problems or improvements, <a href="https://github.com/zckrs/php-gen-doc-api/issues">contact me</a> via GitHub.</p>
-
-<h3>
-<a name="acknowledgment" class="anchor" href="#acknowledgment"><span class="octicon octicon-link"></span></a>Acknowledgment</h3>
-
-<p>This project is inspired by <a href="https://github.com/calinrada/php-apidoc">Calinrada's php-apidoc</a> based on Swagger  and use Extractor.php written by <a href="https://github.com/eriknyk/Annotations/blob/master/Annotations.php">Eriknyk</a></p>
-      </section>
-      <footer>
-        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
-      </footer>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="php-gen-doc-api - agnostic generator documentation for api">
+    <meta name="author" content="Mehdy Dara">
+    <title>php-gen-doc-api v1.4</title>
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="http://jmblog.github.io/color-themes-for-google-code-prettify/css/themes/tomorrow-night-eighties.css" rel="stylesheet" type="text/css">
+    <style type="text/css">
+body {
+    padding-top: 70px;
+    margin-bottom: 15px;
+}
+
+tbody th {
+    text-align: center;
+}
+
+h2 a.anchor {
+    display: block;
+    position: relative;
+    top: -85px;
+    visibility: hidden;
+}
+
+th a.anchor {
+    display: block;
+    position: relative;
+    top: -65px;
+    visibility: hidden;
+}
+
+#anchorMenu a {
+    padding: 10px;
+}
+
+.tab-pane {
+    padding-top: 10px;
+}
+
+.note {
+    font-size: 11px;
+    color: #666666;
+}
+
+.footer {
+    font-size: 12px;
+    color: #666;
+}
+
+.label {
+    display: inline-block;
+    min-width: 65px;
+    padding: 0.3em 0.6em 0.3em;
+}
+
+.popover {
+    max-width: 400px;
+    max-height: 400px;
+}
+
+    </style>
+</head>
+<body>
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">php-gen-doc-api</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form class="navbar-form navbar-right">
+                <div class="form-group">
+                    Api key: <a href="javascript:void(0);" class="tooltipP" data-toggle="tooltip" title="Api key header with api key (key) and api key value (value) "><span class="glyphicon glyphicon-info-sign"></span></a>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control input-sm" placeholder="key" id="apikey_key">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control input-sm" placeholder="value" id="apikey_value">
+                </div>
+            </form>
+        </div><!--/.nav-collapse -->
+      </div>
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-		
-  </body>
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-2" >
+                <div id="anchorMenu" data-spy="affix" data-offset-top="35">
+                    <h4>Ressources</h4>
+                    <a href="#Client_anchor_0">Client</a><br/>
+
+                </div>
+            </div>
+
+            <div class="col-md-10">
+                <h2>Client<a class="anchor" id="Client_anchor_0"></a></h2>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <span class="label label-success">GET</span> <a data-toggle="collapse" data-parent="#accordion0" href="#collapseOne0"> /api/clients/{id}</a>
+        </h4>
+    </div>
+
+    <div id="collapseOne0" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="tab-content">
+
+                <div id="info0">
+                    <h4>Implementation Notes</h4>
+                    Get one client by ID<br/><br/>
+                    <hr>
+
+                    <h4>Response Classes</h4>
+                    <h5>Return JSON root object :</h5><pre class="sample_root_object prettyprint">{ 'meta': metaObject, 'response': array[responseObject] }</pre>
+                    <table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Data Type</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="info">
+    <th colspan="3"><a class="anchor" id="metaObject_anchor_0"></a><i>metaObject</i></th>
+</tr>
+
+<tr>
+    <td>
+        status
+        <div class="note"></div>
+    </td>
+    <td>string</td>
+    <td>Status code returned</td>
+</tr>
+
+<tr>
+    <td>
+        msg
+        <div class="note"></div>
+    </td>
+    <td>string</td>
+    <td>Message to describe status code</td>
+</tr>
+
+<tr class="info">
+    <th colspan="3"><a class="anchor" id="responseObject_anchor_0"></a><i>responseObject</i></th>
+</tr>
+
+<tr>
+    <td>
+        msg
+        <div class="note"></div>
+    </td>
+    <td>array</td>
+    <td>A array of responseObject (cf section Content)</td>
+</tr>
+
+    </tbody>
+</table>
+
+                    <br/>
+                    <hr>
+
+                    <h4>Reponse Errors</h4>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>HTTP Status Code</th>
+                                <th>Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>400</td>
+                                <td>Bad request</td>
+                            </tr>
+                            <tr>
+                                <td>401</td>
+                                <td>Unauthorized</td>
+                            </tr>
+                            <tr>
+                                <td>404</td>
+                                <td>Not Found</td>
+                            </tr>
+                            <tr>
+                                <td>405</td>
+                                <td>Method not allowed</td>
+                            </tr>
+                            <tr>
+                                <td>429</td>
+                                <td>Rate limit exceeded</td>
+                            </tr>
+                            <tr>
+                                <td>500</td>
+                                <td>Internal server error</td>
+                            </tr>
+                            <tr>
+                                <td>503</td>
+                                <td>Service unavailable</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+
+                    <h4>Path Parameters</h4>
+                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/clients/{id}" method="GET" name="form0" id="form0">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Value</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+    <td>
+        id
+        <div class="note">required</div>
+    </td>
+    <td><input type="text" class="form-control input-sm" id="id" placeholder="id" name="id"></td>
+    <td>integer</td>
+    <td>The client ID</td>
+</tr>
+
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-danger send" rel="0">EXECUTE REQUEST</button>
+</form>
+
+                    <hr>
+
+                    <div id="response_0" class="col-md-12" style="display:none;">
+                        <h4>Request URL</h4>
+                        <div id="request_url_0">
+                            <pre></pre>
+                        </div>
+
+                        <!-- <h4>Request Headers</h4>
+                            <div id="request_headers_0">
+                                <pre></pre>
+                            </div> -->
+
+                        <h4>Response Code</h4>
+                        <div id="response_code_0">
+                            <pre></pre>
+                        </div>
+
+                        <h4>Response Headers</h4>
+                        <div id="response_headers_0">
+                            <pre></pre>
+                        </div>
+
+                        <h4>Response Body</h4>
+                        <div id="response_body_0">
+                            <pre class="prettyprint"></pre>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- .tab-content -->
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row footer">
+            <div class="col-md-6">
+                Generated on 2014-05-20, 18:11:36
+            </div>
+            <div class="col-md-6 text-right">
+                <a href="https://github.com/zckrs/php-gen-doc-api" target="_blank">php-gen-doc-api v1.4</a>
+            </div>
+        </div>
+
+    </div> <!-- /container -->
+
+    <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="//google-code-prettify.googlecode.com/svn/trunk/src/prettify.js"></script>
+    <script type="text/javascript">
+$(document).ready(function () {
+
+    $('.tooltipP').tooltip({
+        placement: 'bottom'
+    });
+
+    $.each($('pre.sample_root_object'), function () {
+        var str = $(this).html().replace(/'/g, '"');
+        $(this).html(str);
+    });
+
+    $("a[data-toggle=popover]").click(function () {
+        $("a[data-toggle=popover]").not(this).popover('hide');
+    });
+    $("a[data-toggle=popover]").popover();
+
+    $('tr').on('shown.bs.popover', function () {
+        var sample = $(this).find(".popover-content");
+        var str = '';
+
+        try {
+            str = JSON.stringify(JSON.parse(sample.html().replace(/'/g, '"')), undefined, 2);
+        } catch (e) {
+            str = sample.html();
+        }
+        sample.html('<pre class="prettyprint">' + str + '</pre>');
+        prettyPrint();
+    });
+
+    $('body').on('click', '.send', function (e) {
+        e.preventDefault();
+        var form = $(this).closest('form');
+        var matchedParamsInRoute = $(form).attr('action').match(/{\w+}/g);
+        var theId = $(this).attr('rel');
+
+        var urlForm = $(form).attr('action');
+        var dataSerialize = '';
+
+        if (matchedParamsInRoute) {
+            $("form#" + $(form).attr('id') + " input[type=text]").each(function () {
+                var input = $(this);
+                var index;
+                for (index = 0; index < matchedParamsInRoute.length; ++index) {
+                    try {
+                        var tmp = matchedParamsInRoute[index].replace('{', '').replace('}', '');
+                        if ($(this).attr('id') == tmp) {
+                            urlForm = urlForm.replace(matchedParamsInRoute[index], $(this).val());
+                        }
+                    } catch (err) {
+                        console.log(err);
+                    }
+                }
+            });
+        };
+
+        $('#' + $(form).attr('id') + ' input[type=text]').each(function () {
+            if (matchedParamsInRoute.indexOf('{' + $(this).attr('id') + '}') === -1 && $(this).val() !== '') {
+                dataSerialize += $(this).serialize() + '&';
+            }
+        });
+
+        var customHeaders = {};
+        customHeaders[$('#apikey_key').val()] = $('#apikey_value').val();
+
+        $.ajax({
+            url: urlForm,
+            data: dataSerialize,
+            type: '' + $(form).attr('method') + '',
+            dataType: 'json',
+            headers: customHeaders,
+            success: function (data, textStatus, jqXHR) {
+                if (typeof data === 'object') {
+                    $('#response' + theId).html(JSON.stringify(data, undefined, 4)).removeClass("prettyprinted");
+                    $('#response_body_' + theId + ' pre').html(JSON.stringify(data, undefined, 4)).removeClass("prettyprinted");
+                    prettyPrint();
+                } else {
+                    $('#response' + theId).html(data);
+                    $('#response_body_' + theId + ' pre').html(data);
+                }
+            },
+            error: function (jqXHR, textStatus, error) {
+                if (typeof jqXHR.responseJSON === 'object') {
+                    $('#response_body_' + theId + ' pre').html(JSON.stringify(jqXHR.responseJSON, undefined, 4)).removeClass("prettyprinted");
+                    prettyPrint();
+                } else {
+                    $('#response_body_' + theId + ' pre').html(jqXHR.responseText);
+                }
+            },
+            complete: function (jqXHR, textStatus) {
+                $('#request_url_' + theId + ' pre').html(location.protocol + '//' + location.host + this.url);
+                // $('#request_headers_' + theId + ' pre').html(this.headers);
+                // console.log(this.headers);
+                $('#response_code_' + theId + ' pre').html(jqXHR.status);
+                $('#response_headers_' + theId + ' pre').html(jqXHR.getAllResponseHeaders());
+                $('#response_' + theId).show();
+            }
+        });
+
+        return false;
+    });
+    // Beautify node with class "prettyprint"
+    prettyPrint();
+});
+
+    </script>
+</body>
 </html>
