@@ -1,4 +1,4 @@
-php-gen-doc-api
+php-gen-doc-api [![Build Status](https://travis-ci.org/zckrs/php-gen-doc-api.svg?branch=master)](https://travis-ci.org/zckrs/php-gen-doc-api)
 ==========
 
 Generate documentation for php API based application. No dependency. No framework required.
