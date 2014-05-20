@@ -9,11 +9,12 @@ $(document).ready(function () {
         $(this).html(str);
     });
 
-    $("[data-toggle=popover]").popover({
-        placement: 'right'
+    $("a[data-toggle=popover]").click(function () {
+        $("a[data-toggle=popover]").not(this).popover('hide');
     });
+    $("a[data-toggle=popover]").popover();
 
-    $('body').on('shown.bs.popover', function () {
+    $('tr').on('shown.bs.popover', function () {
         var sample = $(this).find(".popover-content");
         var str = '';
 
