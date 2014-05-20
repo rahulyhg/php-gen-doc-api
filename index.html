@@ -1,0 +1,314 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Php-gen-doc-api by zckrs</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Php-gen-doc-api</h1>
+        <p class="header">Generate documentation for php API based application. No dependency. No framework required.</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/zckrs/php-gen-doc-api/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/zckrs/php-gen-doc-api/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/zckrs/php-gen-doc-api">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/zckrs">zckrs</a></p>
+
+
+      </header>
+      <section>
+        <h1>
+<a name="php-gen-doc-api-" class="anchor" href="#php-gen-doc-api-"><span class="octicon octicon-link"></span></a>php-gen-doc-api <a href="https://travis-ci.org/zckrs/php-gen-doc-api"><img src="https://travis-ci.org/zckrs/php-gen-doc-api.svg?branch=master" alt="Build Status"></a>
+</h1>
+
+<p>Generate documentation for php API based application. No dependency. No framework required.</p>
+
+<ul>
+<li><a href="#preview">Preview</a></li>
+<li><a href="#requirements">Requirements</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#options">Options</a></li>
+<li><a href="#annotations">Annotations</a></li>
+<li><a href="#custom-output-html">Custom output html</a></li>
+<li><a href="#known-issues">Known issues</a></li>
+<li><a href="#acknowledgment">Acknowledgment</a></li>
+</ul><h3>
+<a name="preview" class="anchor" href="#preview"><span class="octicon octicon-link"></span></a>Preview</h3>
+
+<h3>
+<a name="requirements" class="anchor" href="#requirements"><span class="octicon octicon-link"></span></a>Requirements</h3>
+
+<p>You just need <code>PHP &gt;= 5.3.2</code>.</p>
+
+<h3>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h3>
+
+<p>The recommended installation is via compososer. Just add the following line to your composer.json:</p>
+
+<div class="highlight highlight-json"><pre><span class="p">{</span>
+    <span class="err">...</span>
+    <span class="nt">"require"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="err">...</span>
+        <span class="nt">"zckrs/php-gen-doc-api"</span><span class="p">:</span> <span class="s2">"@dev"</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<div class="highlight highlight-bash"><pre><span class="nv">$ </span>php composer.phar update
+</pre></div>
+
+<h3>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h3>
+
+<h6>
+<a name="create-an-gendocapiphp-file-in-your-project-root-folder-as-follow-" class="anchor" href="#create-an-gendocapiphp-file-in-your-project-root-folder-as-follow-"><span class="octicon octicon-link"></span></a>Create an genDocApi.php file in your project root folder as follow :</h6>
+
+<div class="highlight highlight-php"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+
+<span class="c1">// Use autoload</span>
+<span class="k">require</span> <span class="nx">__DIR__</span><span class="o">.</span><span class="s1">'/../../autoload.php'</span><span class="p">;</span>
+
+<span class="c1">// Or include classes</span>
+<span class="c1">// require_once(__DIR__.'/src/Builder.php');</span>
+<span class="c1">// require_once(__DIR__.'/src/Extractor.php');</span>
+<span class="c1">// require_once(__DIR__.'/example/User.php');</span>
+<span class="c1">// require_once(__DIR__.'/example/Document.php');</span>
+
+<span class="k">use</span> <span class="nx">Zckrs\GenDocApi\Builder</span><span class="p">;</span>
+
+<span class="nv">$classes</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">'Controller\GetController'</span><span class="p">,</span>
+<span class="p">);</span>
+
+<span class="k">try</span> <span class="p">{</span>
+    <span class="nv">$builder</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Builder</span><span class="p">(</span><span class="nv">$classes</span><span class="p">,</span>
+        <span class="k">array</span><span class="p">(</span>
+            <span class="s1">'output_file'</span>  <span class="o">=&gt;</span> <span class="s1">'index.html'</span><span class="p">,</span>
+            <span class="s1">'output_dir'</span>   <span class="o">=&gt;</span> <span class="nx">__DIR__</span><span class="o">.</span><span class="s1">'/../web'</span><span class="p">,</span>
+            <span class="s1">'template_dir'</span> <span class="o">=&gt;</span> <span class="nx">__DIR__</span><span class="o">.</span><span class="s1">'/Resources/views'</span><span class="p">,</span>
+            <span class="s1">'asset_dir'</span>    <span class="o">=&gt;</span> <span class="nx">__DIR__</span><span class="o">.</span><span class="s1">'/Resources/assets'</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">);</span>
+    <span class="nv">$builder</span><span class="o">-&gt;</span><span class="na">generate</span><span class="p">();</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">\Exception</span> <span class="nv">$e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s1">'There are an error when generating the documentation : '</span><span class="p">,</span> <span class="nv">$e</span><span class="o">-&gt;</span><span class="na">getMessage</span><span class="p">();</span>
+<span class="p">}</span>
+
+</pre></div>
+
+<h5>
+<a name="then-execute-it-via-cli-" class="anchor" href="#then-execute-it-via-cli-"><span class="octicon octicon-link"></span></a>Then, execute it via CLI :</h5>
+
+<div class="highlight highlight-php"><pre><span class="err">$</span> <span class="nx">php</span> <span class="nx">genDocApi</span><span class="o">.</span><span class="nx">php</span>
+</pre></div>
+
+<h3>
+<a name="options" class="anchor" href="#options"><span class="octicon octicon-link"></span></a>Options</h3>
+
+<h5>
+<a name="output_file" class="anchor" href="#output_file"><span class="octicon octicon-link"></span></a><strong>output_file</strong>
+</h5>
+
+<p>The name of the generated file (default : <code>index.html</code>).</p>
+
+<h5>
+<a name="output_dir" class="anchor" href="#output_dir"><span class="octicon octicon-link"></span></a><strong>output_dir</strong>
+</h5>
+
+<p>The directory to store the html file (default : <code>/web</code>).</p>
+
+<h5>
+<a name="template_dir" class="anchor" href="#template_dir"><span class="octicon octicon-link"></span></a><strong>template_dir</strong>
+</h5>
+
+<p>The directory to store the views (default : <code>/src/Resources/views</code>).
+You can override each view. See <a href="#extend">how to extend output HTML</a></p>
+
+<h5>
+<a name="asset_dir" class="anchor" href="#asset_dir"><span class="octicon octicon-link"></span></a><strong>asset_dir</strong>
+</h5>
+
+<p>The directory to store the assets (default : <code>/src/Resources/assets</code>).
+You can override each asset. See <a href="#extend">how to extend output HTML</a></p>
+
+<h3>
+<a name="annotations" class="anchor" href="#annotations"><span class="octicon octicon-link"></span></a>Annotations</h3>
+
+<p>Here is the list of annotations available so far :</p>
+
+<h5>
+<a name="apidescriptionsection-description" class="anchor" href="#apidescriptionsection-description"><span class="octicon octicon-link"></span></a><strong>@ApiDescription(section="...", description="...")</strong>
+</h5>
+
+<p><em>Argument :</em></p>
+
+<p><code>section</code> : section which stores the method documentation
+<code>description</code> : description of the method</p>
+
+<p><em>Example :</em></p>
+
+<div class="highlight highlight-php"><pre>    <span class="sd">/**</span>
+<span class="sd">     * @ApiDescription(section="User", description="Get information about user")</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getUser</span><span class="p">()</span> <span class="p">{}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * @ApiDescription(section="Document", description="Get a document")</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getDocument</span><span class="p">()</span> <span class="p">{}</span>
+</pre></div>
+
+<h5>
+<a name="apimethodtypegetpostputdelete" class="anchor" href="#apimethodtypegetpostputdelete"><span class="octicon octicon-link"></span></a><strong>@ApiMethod(type="(get|post|put|delete")</strong>
+</h5>
+
+<p><em>Argument :</em></p>
+
+<p><code>type</code> : type of HTTP request</p>
+
+<p><em>Example :</em></p>
+
+<div class="highlight highlight-php"><pre>    <span class="sd">/**</span>
+<span class="sd">     * @ApiMethod(type="GET")</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getUser</span><span class="p">()</span> <span class="p">{}</span>
+</pre></div>
+
+<h5>
+<a name="apiroutename" class="anchor" href="#apiroutename"><span class="octicon octicon-link"></span></a><strong>@ApiRoute(name="...")</strong>
+</h5>
+
+<p><em>Argument :</em></p>
+
+<p><code>route</code> : url to call api</p>
+
+<p><em>Example :</em></p>
+
+<div class="highlight highlight-php"><pre>    <span class="sd">/**</span>
+<span class="sd">     * @ApiRoute(name="/document/get/{id}")</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getDocument</span><span class="p">()</span> <span class="p">{}</span>
+</pre></div>
+
+<h5>
+<a name="apiparamsname-type-nullabletruefalse-description-sample" class="anchor" href="#apiparamsname-type-nullabletruefalse-description-sample"><span class="octicon octicon-link"></span></a><strong>@ApiParams(name="...", type="...", nullable=(true|false), description="...", sample="...")</strong>
+</h5>
+
+<p><em>Argument :</em></p>
+
+<p><code>name</code> : name of param</p>
+
+<p><code>type</code> : primitive types</p>
+
+<p><code>nullable</code> : param is required or not</p>
+
+<p><code>description</code> : a short description</p>
+
+<p><code>sample</code> : example value</p>
+
+<p><em>Example :</em></p>
+
+<div class="highlight highlight-php"><pre>    <span class="sd">/**</span>
+<span class="sd">     * @ApiParams(name="id", type="integer", nullable=false, description="Unique ID document", sample="123456")</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getDocument</span><span class="p">()</span> <span class="p">{}</span>
+</pre></div>
+
+<h5>
+<a name="apireturnrootsamplesample--" class="anchor" href="#apireturnrootsamplesample--"><span class="octicon octicon-link"></span></a><strong>@ApiReturnRootSample(sample="{ ... }")</strong>
+</h5>
+
+<p><em>Argument :</em></p>
+
+<p><code>sample</code> : describes format of root JSON node (use simple quote in JSON sample)</p>
+
+<p><em>Example :</em></p>
+
+<div class="highlight highlight-php"><pre>    <span class="sd">/**</span>
+<span class="sd">     * @ApiReturnRootSample(sample="{ 'documentID': documentObject }")</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getDocument</span><span class="p">()</span> <span class="p">{}</span>
+</pre></div>
+
+<h5>
+<a name="apireturnobjectsection-name-type-desc-note-link" class="anchor" href="#apireturnobjectsection-name-type-desc-note-link"><span class="octicon octicon-link"></span></a><strong>@ApiReturnObject(section="...", name="...", type="...", desc="...", note="...", link="...")</strong>
+</h5>
+
+<p><em>Argument :</em></p>
+
+<p><code>section</code> : property describes belongs to section</p>
+
+<p><code>name</code> : name of property</p>
+
+<p><code>type</code> : primitive type</p>
+
+<p><code>desc</code> : a short description</p>
+
+<p><code>note</code> : define a note for user</p>
+
+<p><code>link</code> : create a anchor link to another section</p>
+
+<p><em>Example :</em></p>
+
+<div class="highlight highlight-php"><pre>    <span class="sd">/**</span>
+<span class="sd">     * @ApiReturnObject(section="documentObject", name="title", type="string", desc="Title of document.")</span>
+<span class="sd">     * @ApiReturnObject(section="documentObject", name="authors", type="array", desc="A array of authors.", note="Exist if not empty", link="authorObject")</span>
+<span class="sd">     *</span>
+<span class="sd">     * @ApiReturnObject(section="authorObject", name="id", type="integer", desc="ID author.")</span>
+<span class="sd">     * @ApiReturnObject(section="authorObject", name="username", type="string", desc="Username author.")</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getDocument</span><span class="p">()</span> <span class="p">{}</span>
+</pre></div>
+
+<h3>
+<a name="custom-output-html" class="anchor" href="#custom-output-html"><span class="octicon octicon-link"></span></a>Custom output HTML</h3>
+
+<h5>
+<a name="what-includes-in-default-layout-" class="anchor" href="#what-includes-in-default-layout-"><span class="octicon octicon-link"></span></a>What includes in default layout :</h5>
+
+<ul>
+<li>Bootstrap v3.1.1</li>
+<li>jQuery v1.10.2</li>
+<li>Google Code Prettify</li>
+</ul><h5>
+<a name="how-to-custom" class="anchor" href="#how-to-custom"><span class="octicon octicon-link"></span></a>How to custom:</h5>
+
+<ol>
+<li>Create a main directory for views.</li>
+<li>Define <code>template_dir</code> in <code>genDocApi.php</code>.</li>
+<li>Put custom view with same model tree. <a href="https://github.com/zckrs/php-gen-doc-api/wiki/Details--views">details</a>
+</li>
+<li>Each view contains some <code>{{ variables }}</code>
+</li>
+</ol><h3>
+<a name="known-issues" class="anchor" href="#known-issues"><span class="octicon octicon-link"></span></a>Known issues</h3>
+
+<p>If you have some problems or improvements, <a href="https://github.com/zckrs/php-gen-doc-api/issues">contact me</a> via GitHub.</p>
+
+<h3>
+<a name="acknowledgment" class="anchor" href="#acknowledgment"><span class="octicon octicon-link"></span></a>Acknowledgment</h3>
+
+<p>This project is inspired by <a href="https://github.com/calinrada/php-apidoc">Calinrada's php-apidoc</a> based on Swagger  and use Extractor.php written by <a href="https://github.com/eriknyk/Annotations/blob/master/Annotations.php">Eriknyk</a></p>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
