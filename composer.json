@@ -2,7 +2,13 @@
     "name": "zckrs/php-gen-doc-api",
     "type": "library",
     "description": "Generate documentation for php API based application. No dependency. No framework required.",
-    "keywords": ["php", "api", "documentation", "generator", "agnostic"],
+    "keywords": [
+        "php",
+        "api",
+        "documentation",
+        "generator",
+        "agnostic"
+    ],
     "homepage": "https://github.com/zckrs/php-gen-doc-api",
     "license": "MIT",
     "authors": [
@@ -16,6 +22,8 @@
         "php": ">=5.3.2"
     },
     "autoload": {
-        "psr-4": { "Zckrs\\GenDocApi\\": "src/" }
+        "psr-4": {
+            "Zckrs\\GenDocApi\\": "src/"
+        }
     }
 }
