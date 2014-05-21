@@ -286,7 +286,7 @@ th a.anchor {
 
         <div class="row footer">
             <div class="col-md-6">
-                Generated on 2014-05-20, 18:11:36
+                Generated on 2014-05-21, 09:43:50
             </div>
             <div class="col-md-6 text-right">
                 <a href="https://github.com/zckrs/php-gen-doc-api" target="_blank">php-gen-doc-api v1.4</a>
@@ -384,7 +384,11 @@ $(document).ready(function () {
                     $('#response_body_' + theId + ' pre').html(JSON.stringify(jqXHR.responseJSON, undefined, 4)).removeClass("prettyprinted");
                     prettyPrint();
                 } else {
-                    $('#response_body_' + theId + ' pre').html(jqXHR.responseText);
+                    if( jqXHR.getResponseHeader('content-type').indexOf('text/html') >= 0 ) {
+                        $('#response_body_' + theId + ' pre').html('<b>Error : response MIME type equal to \'text/html\'</b>');
+                    } else {
+                        $('#response_body_' + theId + ' pre').html(jqXHR.responseText);
+                    }
                 }
             },
             complete: function (jqXHR, textStatus) {
