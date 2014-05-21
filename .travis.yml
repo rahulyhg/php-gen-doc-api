@@ -5,10 +5,14 @@ php:
   - 5.4
   - 5.5
   - 5.6
-  - hhvm
 
 before_script:
-  - composer install --prefer-source
+  - composer self-update
+  - composer install --no-interaction --prefer-source --dev
+
+script:
+  - mkdir -p build/logs build/cov
+  - vendor/bin/phpunit --verbose --colors --coverage-text --coverage-clover ./build/logs/clover.xml -c phpunit.xml.dist;
 
 after_script:
-  - php vendor/bin/coveralls -v
+  - vendor/bin/coveralls
