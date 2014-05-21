@@ -9,3 +9,6 @@ php:
 
 before_script:
   - composer install --prefer-source
+
+after_script:
+  - php vendor/bin/coveralls -v
