@@ -83,7 +83,11 @@ $(document).ready(function () {
                     $('#response_body_' + theId + ' pre').html(JSON.stringify(jqXHR.responseJSON, undefined, 4)).removeClass("prettyprinted");
                     prettyPrint();
                 } else {
-                    $('#response_body_' + theId + ' pre').html(jqXHR.responseText);
+                    if( jqXHR.getResponseHeader('content-type').indexOf('text/html') >= 0 ) {
+                        $('#response_body_' + theId + ' pre').html('<b>Error : response MIME type equal to \'text/html\'</b>');
+                    } else {
+                        $('#response_body_' + theId + ' pre').html(jqXHR.responseText);
+                    }
                 }
             },
             complete: function (jqXHR, textStatus) {
