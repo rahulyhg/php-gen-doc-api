@@ -3,6 +3,7 @@
 namespace Zckrs\GenDocApi;
 
 use Zckrs\GenDocApi\Extractor;
+use Zckrs\GenDocApi\Entity\OptionsBuilder;
 
 class Builder
 {
@@ -14,42 +15,33 @@ class Builder
     const VERSION = '1.4';
 
     /**
-     * Classes collection
+     * Array of classes that contains annotations used to generate the output
      *
      * @var array
      */
     private $classes;
 
     /**
-     * Array options to define path directories
+     * Options and configuration for the current job
      *
-     * @var array
+     * @var OptionsBuilder
      */
     private $options;
 
     /**
-     * Constructor
-     *
-     * @param array $classes
+     * @param array                 $classes    Classes that contains annotations used to generate the output
+     * @param Entity\OptionsBuilder $options    Options and configuration for the current job
      */
-    public function __construct(array $classes, $options = array())
+    public function __construct(array $classes, OptionsBuilder $options = null)
     {
         $this->classes = $classes;
-
-        $this->options = array_replace(
-            array(
-                'output_file'  => 'index.html',
-                'output_dir'   => __DIR__.'/../web',
-                'template_dir' => __DIR__.'/Resources/views',
-                'asset_dir'    => __DIR__.'/Resources/assets',
-            ), $options
-        );
+        $this->options = $options ? $options : new OptionsBuilder();
     }
 
     public function getTemplate($filePath)
     {
-        if (!file_exists($file = $this->options['template_dir'].'/'.$filePath)) {
-            $file = __DIR__.'/Resources/views/'.$filePath;
+        if (!file_exists($file = $this->options->getTemplateDir() . '/' . $filePath)) {
+            $file = __DIR__ . '/Resources/views/' . $filePath;
         }
 
         return file_get_contents($file);
@@ -57,8 +49,8 @@ class Builder
 
     public function getAsset($filePath)
     {
-        if (!file_exists($file = $this->options['asset_dir'].'/'.$filePath)) {
-            $file = __DIR__.'/Resources/assets/'.$filePath;
+        if (!file_exists($file = $this->options->getAssetDir() . '/' . $filePath)) {
+            $file = __DIR__ . '/Resources/assets/' . $filePath;
         }
 
         return file_get_contents($file);
@@ -86,22 +78,24 @@ class Builder
         $js  = $this->getAsset('js.js');
 
         $tr = array(
-            '{{ content }}'     => $data,
-            '{{ anchor_menu }}' => $anchorMenu,
-            '{{ date }}'        => date('Y-m-d, H:i:s'),
-            '{{ version }}'     => static::VERSION,
-            '{{ css }}'         => $css,
-            '{{ js }}'          => $js,
+            '{{ app_name }}'        => $this->options->getApiName(),
+            '{{ app_description }}' => $this->options->getApiDescription(),
+            '{{ content }}'         => $data,
+            '{{ anchor_menu }}'     => $anchorMenu,
+            '{{ date }}'            => date('Y-m-d, H:i:s'),
+            '{{ version }}'         => static::VERSION,
+            '{{ css }}'             => $css,
+            '{{ js }}'              => $js,
         );
         $newContent = strtr($oldContent, $tr);
 
-        if (!is_dir($this->options['output_dir'])) {
-            if (!mkdir($this->options['output_dir'])) {
+        if (!is_dir($this->options->getOutputDir())) {
+            if (!mkdir($this->options->getOutputDir())) {
                 throw new \Exception('Cannot create directory');
             }
         }
-        if (!file_put_contents($this->options['output_dir'].'/'.$file, $newContent)) {
-            throw new \Exception('Cannot save the content to '.$this->options['output_dir']);
+        if (!file_put_contents($this->options->getOutputDir() . '/' . $file, $newContent)) {
+            throw new \Exception('Cannot save the content to '.$this->options->getOutputDir());
         }
     }
 
@@ -159,7 +153,7 @@ class Builder
             }
         }
 
-        $this->saveTemplate(implode(PHP_EOL, $template), implode(PHP_EOL, $anchorMenu), $this->options['output_file']);
+        $this->saveTemplate(implode(PHP_EOL, $template), implode(PHP_EOL, $anchorMenu), $this->options->getOutputFile());
 
         return true;
     }
