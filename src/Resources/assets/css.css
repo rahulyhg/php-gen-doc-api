@@ -49,3 +49,12 @@ th a.anchor {
     max-width: 400px;
     max-height: 400px;
 }
+
+/* Small devices */
+@media (max-width: 991px) {
+    #anchorMenu {
+        position: static;
+        width: auto;
+        top: 0;
+    }
+}
