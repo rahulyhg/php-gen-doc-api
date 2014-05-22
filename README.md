@@ -26,7 +26,7 @@ You just need ```PHP >= 5.3.2```.
 
 ### <a id="installation"></a>Installation
 
-The recommended installation is via composer. Just add the following line to your composer.json :
+The recommended installation is via composer. Just add the following line to your composer.json:
 
 ```json
 {
@@ -44,21 +44,24 @@ $ php composer.phar update
 ### <a id="usage"></a>Usage
 * Duplicate the [genDocApi.php](genDocApi.php) file in your project root for example.
 * Set [options](#options) in this new file.
-* Execute it via CLI : `php genDocApi.php`
+* Execute it via CLI: `php genDocApi.php`
 * You get a new HTML file. (With default options stored in web/index.html)
 
-
 ### <a id="options"></a>Options
-##### output_file
-The name of the generated file (default : ```index.html```).
-##### output_dir
-The directory to store the html file (default : ```/web```).
-##### template_dir
-The directory to store the views (default : ```/src/Resources/views```).
+##### apiName
+The name of the current API, displayed at the top of the generated file (default: ```php-gen-doc-api```).
+##### apiDescription
+The description of the current API, displayed on the top of the generated file (default: no value).
+##### outputFile
+The name of the generated file (default: ```index.html```).
+##### outputDir
+The directory to store the html file (default: ```/web```).
+##### templateDir
+The directory to store the views (default: ```/src/Resources/views```).
 
 You can override view. See [how to custom output HTML](#custom-output-html)
-##### asset_dir
-The directory to store the assets (default : ```/src/Resources/assets```).
+##### assetDir
+The directory to store the assets (default: ```/src/Resources/assets```).
 
 You can override asset. See [how to custom output HTML](#custom-output-html)
 
@@ -73,7 +76,7 @@ You can override asset. See [how to custom output HTML](#custom-output-html)
 
 
 ### <a id="custom-output-html"></a>Custom output HTML
-##### What includes in default [layout.html](src/Resources/views/layout.html) :
+##### What includes in default [layout.html](src/Resources/views/layout.html):
 
  - Bootstrap v3.1.1
  - jQuery v1.10.2
