@@ -1,19 +1,25 @@
 $(document).ready(function () {
-
+    // Define tolltip header Api-Key
     $('.tooltipP').tooltip({
         placement: 'bottom'
     });
 
-    $.each($('pre.sample_root_object'), function () {
-        var str = $(this).html().replace(/'/g, '"');
-        $(this).html(str);
-    });
-
+    // Define popover sample value in Path Parameters (for @ApiParams)
     $("a[data-toggle=popover]").click(function () {
         $("a[data-toggle=popover]").not(this).popover('hide');
     });
     $("a[data-toggle=popover]").popover();
 
+    // Prettify node with class "prettyprint"
+    prettyPrint();
+
+    // Replace JSON simple quote ' by double quote " in Response Classes (for @ApiReturnRootSample)
+    $.each($('pre.sample_root_object'), function () {
+        var str = $(this).html().replace(/'/g, '"');
+        $(this).html(str);
+    });
+
+    // Prettify sample code in popover
     $('tr').on('shown.bs.popover', function () {
         var sample = $(this).find(".popover-content");
         var str = '';
@@ -27,6 +33,7 @@ $(document).ready(function () {
         prettyPrint();
     });
 
+    // Process to send ajax request on API
     $('body').on('click', '.send', function (e) {
         e.preventDefault();
         var form = $(this).closest('form');
@@ -70,7 +77,6 @@ $(document).ready(function () {
             headers: customHeaders,
             success: function (data, textStatus, jqXHR) {
                 if (typeof data === 'object') {
-                    $('#response' + theId).html(JSON.stringify(data, undefined, 4)).removeClass("prettyprinted");
                     $('#response_body_' + theId + ' pre').html(JSON.stringify(data, undefined, 4)).removeClass("prettyprinted");
                     prettyPrint();
                 } else {
@@ -81,14 +87,14 @@ $(document).ready(function () {
             error: function (jqXHR, textStatus, error) {
                 if (typeof jqXHR.responseJSON === 'object') {
                     $('#response_body_' + theId + ' pre').html(JSON.stringify(jqXHR.responseJSON, undefined, 4)).removeClass("prettyprinted");
-                    prettyPrint();
                 } else {
                     if( jqXHR.getResponseHeader('content-type').indexOf('text/html') >= 0 ) {
-                        $('#response_body_' + theId + ' pre').html('<b>Error : response MIME type equal to \'text/html\'</b>');
+                        $('#response_body_' + theId + ' pre').html('<b>Error : response MIME type equal to \'text/html\'</b>').removeClass("prettyprinted");
                     } else {
-                        $('#response_body_' + theId + ' pre').html(jqXHR.responseText);
+                        $('#response_body_' + theId + ' pre').html(jqXHR.responseText).removeClass("prettyprinted");
                     }
                 }
+                prettyPrint();
             },
             complete: function (jqXHR, textStatus) {
                 $('#request_url_' + theId + ' pre').html(location.protocol + '//' + location.host + this.url);
@@ -102,6 +108,4 @@ $(document).ready(function () {
 
         return false;
     });
-    // Beautify node with class "prettyprint"
-    prettyPrint();
 });

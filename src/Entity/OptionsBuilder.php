@@ -42,7 +42,7 @@ class OptionsBuilder
 
     public function __construct()
     {
-        $this->apiName = 'php-gen-doc-api';
+        $this->apiName = '';
         $this->apiDescription = '';
         $this->output_file = 'index.html';
         $this->output_dir = __DIR__ . '/../../web';

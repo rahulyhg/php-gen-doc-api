@@ -1,7 +1,7 @@
 {
     "name": "zckrs/php-gen-doc-api",
     "type": "library",
-    "description": "Generate documentation for php API based application. No dependency. No framework required.",
+    "description": "Generate documentation for PHP API with Annotations. No dependency. No framework required.",
     "keywords": [
         "php",
         "api",
