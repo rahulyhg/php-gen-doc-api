@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="php-gen-doc-api - agnostic generator documentation for api">
     <meta name="author" content="Mehdy Dara">
-    <title>php-gen-doc-api v1.4</title>
+    <title>My API - php-gen-doc-api</title>
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="http://jmblog.github.io/color-themes-for-google-code-prettify/css/themes/tomorrow-night-eighties.css" rel="stylesheet" type="text/css">
     <style type="text/css">
@@ -19,7 +19,7 @@ tbody th {
     text-align: center;
 }
 
-h2 a.anchor {
+h3 a.anchor {
     display: block;
     position: relative;
     top: -85px;
@@ -60,6 +60,15 @@ th a.anchor {
 .popover {
     max-width: 400px;
     max-height: 400px;
+}
+
+/* Small devices */
+@media (max-width: 991px) {
+    #anchorMenu {
+        position: static;
+        width: auto;
+        top: 0;
+    }
 }
 
     </style>
@@ -105,7 +114,9 @@ th a.anchor {
             </div>
 
             <div class="col-md-10">
-                <h2>Client<a class="anchor" id="Client_anchor_0"></a></h2>
+                <h2>My API</h2>
+                <p>That is my awesome API. And this is why you will fall in love with.</p>
+                <h3>Client<a class="anchor" id="Client_anchor_0"></a></h3>
 
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -175,7 +186,7 @@ th a.anchor {
                     <br/>
                     <hr>
 
-                    <h4>Reponse Errors</h4>
+                    <h4>Response Errors</h4>
                     <table class="table table-hover">
                         <thead>
                             <tr>
@@ -286,7 +297,7 @@ th a.anchor {
 
         <div class="row footer">
             <div class="col-md-6">
-                Generated on 2014-05-21, 09:43:50
+                Generated on 2014-05-23, 16:05:06
             </div>
             <div class="col-md-6 text-right">
                 <a href="https://github.com/zckrs/php-gen-doc-api" target="_blank">php-gen-doc-api v1.4</a>
@@ -300,21 +311,27 @@ th a.anchor {
     <script src="//google-code-prettify.googlecode.com/svn/trunk/src/prettify.js"></script>
     <script type="text/javascript">
 $(document).ready(function () {
-
+    // Define tolltip header Api-Key
     $('.tooltipP').tooltip({
         placement: 'bottom'
     });
 
-    $.each($('pre.sample_root_object'), function () {
-        var str = $(this).html().replace(/'/g, '"');
-        $(this).html(str);
-    });
-
+    // Define popover sample value in Path Parameters (for @ApiParams)
     $("a[data-toggle=popover]").click(function () {
         $("a[data-toggle=popover]").not(this).popover('hide');
     });
     $("a[data-toggle=popover]").popover();
 
+    // Prettify node with class "prettyprint"
+    prettyPrint();
+
+    // Replace JSON simple quote ' by double quote " in Response Classes (for @ApiReturnRootSample)
+    $.each($('pre.sample_root_object'), function () {
+        var str = $(this).html().replace(/'/g, '"');
+        $(this).html(str);
+    });
+
+    // Prettify sample code in popover
     $('tr').on('shown.bs.popover', function () {
         var sample = $(this).find(".popover-content");
         var str = '';
@@ -328,6 +345,7 @@ $(document).ready(function () {
         prettyPrint();
     });
 
+    // Process to send ajax request on API
     $('body').on('click', '.send', function (e) {
         e.preventDefault();
         var form = $(this).closest('form');
@@ -371,7 +389,6 @@ $(document).ready(function () {
             headers: customHeaders,
             success: function (data, textStatus, jqXHR) {
                 if (typeof data === 'object') {
-                    $('#response' + theId).html(JSON.stringify(data, undefined, 4)).removeClass("prettyprinted");
                     $('#response_body_' + theId + ' pre').html(JSON.stringify(data, undefined, 4)).removeClass("prettyprinted");
                     prettyPrint();
                 } else {
@@ -382,14 +399,14 @@ $(document).ready(function () {
             error: function (jqXHR, textStatus, error) {
                 if (typeof jqXHR.responseJSON === 'object') {
                     $('#response_body_' + theId + ' pre').html(JSON.stringify(jqXHR.responseJSON, undefined, 4)).removeClass("prettyprinted");
-                    prettyPrint();
                 } else {
                     if( jqXHR.getResponseHeader('content-type').indexOf('text/html') >= 0 ) {
-                        $('#response_body_' + theId + ' pre').html('<b>Error : response MIME type equal to \'text/html\'</b>');
+                        $('#response_body_' + theId + ' pre').html('<b>Error : response MIME type equal to \'text/html\'</b>').removeClass("prettyprinted");
                     } else {
-                        $('#response_body_' + theId + ' pre').html(jqXHR.responseText);
+                        $('#response_body_' + theId + ' pre').html(jqXHR.responseText).removeClass("prettyprinted");
                     }
                 }
+                prettyPrint();
             },
             complete: function (jqXHR, textStatus) {
                 $('#request_url_' + theId + ' pre').html(location.protocol + '//' + location.host + this.url);
@@ -403,8 +420,6 @@ $(document).ready(function () {
 
         return false;
     });
-    // Beautify node with class "prettyprint"
-    prettyPrint();
 });
 
     </script>
