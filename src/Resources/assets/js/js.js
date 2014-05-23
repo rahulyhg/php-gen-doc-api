@@ -45,12 +45,11 @@ $(document).ready(function () {
 
         if (matchedParamsInRoute) {
             $("form#" + $(form).attr('id') + " input[type=text]").each(function () {
-                var input = $(this);
                 var index;
                 for (index = 0; index < matchedParamsInRoute.length; ++index) {
                     try {
                         var tmp = matchedParamsInRoute[index].replace('{', '').replace('}', '');
-                        if ($(this).attr('id') == tmp) {
+                        if ($(this).attr('name') == tmp) {
                             urlForm = urlForm.replace(matchedParamsInRoute[index], $(this).val());
                         }
                     } catch (err) {
@@ -58,7 +57,7 @@ $(document).ready(function () {
                     }
                 }
             });
-        };
+        }
 
         $('#' + $(form).attr('id') + ' input[type=text]').each(function () {
             if (matchedParamsInRoute.indexOf('{' + $(this).attr('id') + '}') === -1 && $(this).val() !== '') {
@@ -75,6 +74,9 @@ $(document).ready(function () {
             type: '' + $(form).attr('method') + '',
             dataType: 'json',
             headers: customHeaders,
+            beforeSend: function() {
+                $('#spinner_' + theId).show();
+            },
             success: function (data, textStatus, jqXHR) {
                 if (typeof data === 'object') {
                     $('#response_body_' + theId + ' pre').html(JSON.stringify(data, undefined, 4)).removeClass("prettyprinted");
@@ -103,6 +105,7 @@ $(document).ready(function () {
                 $('#response_code_' + theId + ' pre').html(jqXHR.status);
                 $('#response_headers_' + theId + ' pre').html(jqXHR.getAllResponseHeaders());
                 $('#response_' + theId).show();
+                $('#spinner_' + theId).hide();
             }
         });
 

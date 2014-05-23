@@ -8,6 +8,7 @@ require_once(__DIR__ . '/src/Builder.php');
 require_once(__DIR__ . '/src/Extractor.php');
 require_once(__DIR__ . '/src/Entity/OptionsBuilder.php');
 require_once(__DIR__ . '/tests/sample/Client.php');
+require_once(__DIR__ . '/tests/sample/Document.php');
 
 use Zckrs\GenDocApi\Builder;
 use Zckrs\GenDocApi\Entity\OptionsBuilder;
@@ -15,6 +16,7 @@ use Zckrs\GenDocApi\Entity\OptionsBuilder;
 // Define classes to search annotations
 $classes = array(
     'Zckrs\GenDocApi\Test\Client',
+    'Zckrs\GenDocApi\Test\Document',
 );
 
 // Options for the Builder. Please see Zckrs\GenDocApi\Entity\OptionsBuilder for available attributes.

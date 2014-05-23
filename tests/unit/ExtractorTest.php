@@ -26,66 +26,60 @@ class ExtractorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(1, $annotations, 'Number of Client methods');
         $this->assertArrayHasKey('Zckrs\GenDocApi\Test\Client', $annotations);
-        $this->assertArrayHasKey('getClient', $annotations['Zckrs\GenDocApi\Test\Client']);
+        $this->assertArrayHasKey('get', $annotations['Zckrs\GenDocApi\Test\Client']);
 
         $this->assertCount(
-            6,
-            $annotations['Zckrs\GenDocApi\Test\Client']['getClient'],
-            'Number of annotation for the getClient method'
+            5,
+            $annotations['Zckrs\GenDocApi\Test\Client']['get'],
+            'Number of annotation for the get method'
         );
 
         $this->assertCount(
             1,
-            $annotations['Zckrs\GenDocApi\Test\Client']['getClient']['ApiDescription'],
-            'Number of ApiDescription annotations for the getClient method'
+            $annotations['Zckrs\GenDocApi\Test\Client']['get']['ApiDescription'],
+            'Number of ApiDescription annotations for the get method'
         );
 
         $this->assertCount(
             1,
-            $annotations['Zckrs\GenDocApi\Test\Client']['getClient']['ApiDescription'],
-            'Number of ApiDescription annotations for the getClient method'
+            $annotations['Zckrs\GenDocApi\Test\Client']['get']['ApiDescription'],
+            'Number of ApiDescription annotations for the get method'
         );
 
         $this->assertArrayHasKey(
             'section',
-            $annotations['Zckrs\GenDocApi\Test\Client']['getClient']['ApiDescription'][0],
-            'The "section" attribute for getClient/ApiDescription annotation exists'
+            $annotations['Zckrs\GenDocApi\Test\Client']['get']['ApiDescription'][0],
+            'The "section" attribute for get/ApiDescription annotation exists'
         );
 
         $this->assertArrayHasKey(
             'description',
-            $annotations['Zckrs\GenDocApi\Test\Client']['getClient']['ApiDescription'][0],
-            'The "description" attribute for getClient/ApiDescription annotation exists'
+            $annotations['Zckrs\GenDocApi\Test\Client']['get']['ApiDescription'][0],
+            'The "description" attribute for get/ApiDescription annotation exists'
         );
     }
 
     public function testGetMethodAnnotations()
     {
-        $annotations = $this->extractor->getMethodAnnotations('Zckrs\GenDocApi\Test\Client', 'getClient');
+        $annotations = $this->extractor->getMethodAnnotations('Zckrs\GenDocApi\Test\Client', 'get');
 
-        $this->assertCount(6, $annotations, 'Number of getClient annotations');
+        $this->assertCount(5, $annotations, 'Number of get annotations');
 
-        $this->assertArrayHasKey('ApiDescription', $annotations, 'getClient have an ApiDocumentation annotation');
+        $this->assertArrayHasKey('ApiDescription', $annotations, 'get have an ApiDocumentation annotation');
 
         $this->assertArrayHasKey(
             'type',
             $annotations['ApiReturnObject'][0],
-            'The "type" attribute for getClient/ApiReturnObject annotation exists'
+            'The "type" attribute for get/ApiReturnObject annotation exists'
         );
 
-
-        $this->assertArrayHasKey(
-            'nullable',
-            $annotations['ApiParams'][0],
-            'The "nullable" attribute for getClient/ApiDescription annotation exists'
-        );
     }
 
     public function testGetMethodAnnotationsObjects()
     {
-        $annotations = $this->extractor->getMethodAnnotationsObjects('Zckrs\GenDocApi\Test\Client', 'getClient');
+        $annotations = $this->extractor->getMethodAnnotationsObjects('Zckrs\GenDocApi\Test\Client', 'get');
 
-        $this->assertCount(0, $annotations, 'Number of getClient object annotations');
+        $this->assertCount(0, $annotations, 'Number of get object annotations');
 
     }
 }
