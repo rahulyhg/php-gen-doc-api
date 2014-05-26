@@ -12,7 +12,7 @@ before_script:
 
 script:
   - mkdir -p build/logs build/cov
-  - vendor/bin/phpunit --verbose --colors --coverage-text --coverage-clover ./build/logs/clover.xml -c phpunit.xml.dist;
+  - php vendor/bin/phpunit --verbose --colors --coverage-text --coverage-clover ./build/logs/clover.xml -c phpunit.xml.dist;
 
 after_script:
-  - vendor/bin/coveralls
+  - php vendor/bin/coveralls -v

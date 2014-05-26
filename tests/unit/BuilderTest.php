@@ -30,6 +30,20 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('body {', $layout);
     }
 
+    public function testGenerate()
+    {
+        $builderOptions = new OptionsBuilder();
+        $builderOptions->setApiName('testApp');
+        $builderOptions->setOutputDir('build');
+        $builderOptions->setOutputFile('test.html');
+
+        $this->builder = new Builder(array('Zckrs\GenDocApi\Test\Client'), $builderOptions);
+
+        $this->builder->generate();
+
+        $this->assertFileExists('build/test.html');
+    }
+
     /**
      * @expectedException \Exception
      */

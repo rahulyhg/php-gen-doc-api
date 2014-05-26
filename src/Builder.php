@@ -92,11 +92,10 @@ class Builder
         );
         $newContent = strtr($oldContent, $tr);
 
-        if (!is_dir($this->options->getOutputDir())) {
-            if (!@mkdir($this->options->getOutputDir())) {
-                throw new \Exception("Cannot create directory ".$this->options->getOutputDir()."\n");
-            }
+        if (!is_dir($this->options->getOutputDir()) && !@mkdir($this->options->getOutputDir())) {
+           throw new \Exception("Cannot create directory ".$this->options->getOutputDir()."\n");
         }
+
         if (!@file_put_contents($this->options->getOutputDir() . '/' . $file, $newContent)) {
             throw new \Exception("Cannot save the content to ".$this->options->getOutputDir()."\n");
         }
