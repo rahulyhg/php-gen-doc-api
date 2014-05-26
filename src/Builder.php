@@ -70,32 +70,35 @@ class Builder
         return end($st_output);
     }
 
-    private function saveTemplate($data, $anchorMenu, $file)
+    private function saveTemplate($content, $anchorMenu, $file)
     {
         $oldContent = $this->getTemplate('layout.html');
 
-        $css = $this->getAsset('css.css');
-        $js  = $this->getAsset('js.js');
+        $arrayCss = array();
+        $arrayCss[] = $this->getAsset('css/css.css');
+
+        $arrayJs = array();
+        $arrayJs[] = $this->getAsset('js/js.js');
 
         $tr = array(
             '{{ app_name }}'        => $this->options->getApiName(),
             '{{ app_description }}' => $this->options->getApiDescription(),
-            '{{ content }}'         => $data,
+            '{{ content }}'         => $content,
             '{{ anchor_menu }}'     => $anchorMenu,
             '{{ date }}'            => date('Y-m-d, H:i:s'),
             '{{ version }}'         => static::VERSION,
-            '{{ css }}'             => $css,
-            '{{ js }}'              => $js,
+            '{{ css }}'             => implode(PHP_EOL, $arrayCss),
+            '{{ js }}'              => implode(PHP_EOL, $arrayJs),
         );
         $newContent = strtr($oldContent, $tr);
 
         if (!is_dir($this->options->getOutputDir())) {
-            if (!mkdir($this->options->getOutputDir())) {
-                throw new \Exception('Cannot create directory');
+            if (!@mkdir($this->options->getOutputDir())) {
+                throw new \Exception("Cannot create directory ".$this->options->getOutputDir()."\n");
             }
         }
-        if (!file_put_contents($this->options->getOutputDir() . '/' . $file, $newContent)) {
-            throw new \Exception('Cannot save the content to '.$this->options->getOutputDir());
+        if (!@file_put_contents($this->options->getOutputDir() . '/' . $file, $newContent)) {
+            throw new \Exception("Cannot save the content to ".$this->options->getOutputDir()."\n");
         }
     }
 
@@ -110,8 +113,9 @@ class Builder
 
         $template = array();
         $anchorMenu = array();
+
         $counter = 0;
-        $section = null;
+        $currentSection = null;
 
         $contentMainTpl  = $this->getTemplate('content/contentMain.html');
         $sectionTitleTpl = $this->getTemplate('content/sectionTitle.html');
@@ -120,29 +124,34 @@ class Builder
 
         foreach ($st_annotations as $class => $methods) {
             foreach ($methods as $name => $docs) {
-                if (isset($docs['ApiDescription'][0]['section']) && $docs['ApiDescription'][0]['section'] !== $section) {
-                    $section = $docs['ApiDescription'][0]['section'];
+                // No @Api define in current method
+                if (0 === count($docs)) {
+                    continue;
+                }
+
+                // Create a section title and entry menu if @ApiDescription change
+                if (isset($docs['ApiDescription'][0]['section']) && $docs['ApiDescription'][0]['section'] !== $currentSection) {
                     $template[] = strtr($sectionTitleTpl, array(
                         '{{ elt_id }}'  => $counter,
-                        '{{ section }}' => $section,
+                        '{{ section }}' => $docs['ApiDescription'][0]['section'],
                     ));
 
                     $anchorMenu[] = strtr($anchorTpl, array(
                         '{{ elt_id }}'  => $counter,
-                        '{{ section }}' => $section,
+                        '{{ section }}' => $docs['ApiDescription'][0]['section'],
                     ));
+
+                    $currentSection = $docs['ApiDescription'][0]['section'];
                 }
-                if (0 === count($docs)) {
-                    continue;
-                }
+
+                // Translate variables by values
                 $tr = array(
-                    '{{ elt_id }}'                => $counter,
-                    '{{ method }}'                => $this->generateBadgeForMethod($docs),
-                    '{{ route }}'                 => $docs['ApiRoute'][0]['name'],
-                    '{{ description }}'           => $docs['ApiDescription'][0]['description'],
-                    '{{ parameters }}'            => $this->generateParamsTemplate($counter, $docs),
-                    '{{ table_object_response }}' => $this->generateResponseClasses($docs, $counter),
-                    '{{ sample_root_object }}'    => $this->generateRootSample($docs),
+                    '{{ elt_id }}'  => $counter,
+                    '{{ method }}'  => $this->generateBadgeForMethod($docs),
+                    '{{ route }}'   => $docs['ApiRoute'][0]['url'],
+                    '{{ implementation_notes }}' => $this->generateImplementationNotes($docs, $counter),
+                    '{{ response_classes }}'     => $this->generateResponseClasses($docs, $counter),
+                    '{{ path_parameters }}'      => $this->generateParamsTemplate($docs, $counter),
                 );
                 $template[] = strtr($contentMainTpl, $tr);
 
@@ -171,7 +180,11 @@ class Builder
             return '';
         }
 
-        return '<h5>Return JSON root object :</h5><pre class="sample_root_object prettyprint">'.$st_params['ApiReturnRootSample'][0]['sample'].'</pre>';
+        $rootSampleTpl = $this->getTemplate('content/responseClasses/rootSample.html');
+
+        return strtr($rootSampleTpl, array(
+            '{{ sample_root_object }}' => $st_params['ApiReturnRootSample'][0]['sample'],
+        ));
     }
 
     /**
@@ -180,8 +193,9 @@ class Builder
      * @param  array   $st_params
      * @param  integer $counter
      * @return string
+     * @todo Generate anchor menu based on different section (not ApiReturnObject)
      */
-    private function generateAnchorMenu($st_params, $counter)
+    /*private function generateAnchorMenu($st_params, $counter)
     {
         if (!isset($st_params['ApiReturnObject'][0])) {
             return '';
@@ -205,18 +219,43 @@ class Builder
 
         return implode(PHP_EOL, $ret);
     }
+    */
+
+   /**
+     * Generates section "Implementation Notes" for one method
+     *
+     * @param  int         $id
+     * @param  array       $st_params
+     *
+     * @return string
+     */
+    private function generateImplementationNotes($st_params, $counter)
+    {
+        if (!isset($st_params['ApiDescription']))
+        {
+            return '';
+        }
+        //$docs['ApiDescription'][0]['description']
+        $descTpl  = $this->getTemplate('content/implementationNotes/main.html');
+
+        return strtr($descTpl, array(
+            '{{ elt_id }}'  => $counter,
+            '{{ content }}' => $st_params['ApiDescription'][0]['description'],
+        ));
+    }
 
     /**
-     * Generate the object response
+     * Generates section "Response Classes" for one method
      *
      * @param  array   $st_params
      * @param  integer $counter
+     *
      * @return string
      */
     private function generateResponseClasses($st_params, $counter)
     {
         if (!isset($st_params['ApiReturnObject'])) {
-            return 'NA';
+            return '';
         }
 
         $mainTpl    = $this->getTemplate('content/responseClasses/main.html');
@@ -234,7 +273,7 @@ class Builder
                 '{{ name }}'   => $params['name'],
                 '{{ type }}'   => $params['type'],
                 '{{ note }}'   => @$params['note'],
-                '{{ desc }}'   => $params['desc'],
+                '{{ desc }}'   => @$params['desc'],
             );
 
             if (isset($params['link'])) {
@@ -258,46 +297,45 @@ class Builder
 
         return strtr($mainTpl, array(
             '{{ elt_id }}' => $counter,
-            '{{ responseTableBody }}' => implode(PHP_EOL, $ret),
+            '{{ responseTableBody }}'  => implode(PHP_EOL, $ret),
+            '{{ sample_root_object }}' => $this->generateRootSample($st_params),
         ));
     }
 
     /**
-     * Generates the template for parameters
+     * Generates section "Path Parameters" for one method
      *
-     * @param  int         $id
-     * @param  array       $st_params
-     * @return void|string
+     * @param  int   $id
+     * @param  array $st_params
+     *
+     * @return string
      */
-    private function generateParamsTemplate($counter, $st_params)
+    private function generateParamsTemplate($st_params, $counter)
     {
-        if (!isset($st_params['ApiParams']))
-        {
-            return;
-        }
-
-        $tableTpl   = $this->getTemplate('content/pathParameters/table.html');
+        $mainTpl    = $this->getTemplate('content/pathParameters/main.html');
         $tBodyTpl   = $this->getTemplate('content/pathParameters/tBody.html');
         $popoverTpl = $this->getTemplate('content/pathParameters/popover.html');
 
         $body = array();
-        foreach ($st_params['ApiParams'] as $params) {
-            $tr = array(
-                '{{ name }}'        => $params['name'],
-                '{{ type }}'        => $params['type'],
-                '{{ nullable }}'    => @$params['nullable'] == '1' ? 'optional' : 'required',
-                '{{ description }}' => @$params['description'],
-            );
-            if (isset($params['sample'])) {
-                $tr['{{ type }}'].= ' '.strtr($popoverTpl, array('{{ sample }}' => $params['sample']));
+        if (isset($st_params['ApiParams'])) {
+            foreach ($st_params['ApiParams'] as $params) {
+                $tr = array(
+                    '{{ name }}'        => $params['name'],
+                    '{{ type }}'        => $params['type'],
+                    '{{ nullable }}'    => @$params['nullable'] == '1' ? 'optional' : 'required',
+                    '{{ description }}' => @$params['description'],
+                );
+                if (isset($params['sample'])) {
+                    $tr['{{ type }}'].= ' '.strtr($popoverTpl, array('{{ sample }}' => $params['sample']));
+                }
+                $body[] = strtr($tBodyTpl, $tr);
             }
-            $body[] = strtr($tBodyTpl, $tr);
         }
 
-        return strtr($tableTpl, array(
+        return strtr($mainTpl, array(
             '{{ elt_id }}' => $counter,
             '{{ method }}' => $st_params['ApiMethod'][0]['type'],
-            '{{ route }}'  => $st_params['ApiRoute'][0]['name'],
+            '{{ route }}'  => $st_params['ApiRoute'][0]['url'],
             '{{ tbody }}' => implode(PHP_EOL, $body),
         ));
     }

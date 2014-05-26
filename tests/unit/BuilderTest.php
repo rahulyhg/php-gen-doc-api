@@ -1,6 +1,7 @@
 <?php
 
 use Zckrs\GenDocApi\Builder;
+use Zckrs\GenDocApi\Entity\OptionsBuilder;
 
 class BuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,8 +25,40 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAsset()
     {
-        $layout = $this->builder->getAsset('css.css');
+        $layout = $this->builder->getAsset('css/css.css');
 
         $this->assertContains('body {', $layout);
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testCantCreateDirectory()
+    {
+        $builderOptions = new OptionsBuilder();
+        $builderOptions->setApiName('testApp');
+        $builderOptions->setOutputDir('/test');
+
+        $this->builder = new Builder(array('Zckrs\GenDocApi\Test\Client'), $builderOptions);
+
+        $this->builder->generate();
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testCantSaveTheContent()
+    {
+        $builderOptions = new OptionsBuilder();
+        $builderOptions->setApiName('testApp');
+        $builderOptions->setOutputDir('build/test');
+        $builderOptions->setOutputFile('test.html');
+
+        if (!file_exists($builderOptions->getOutputDir())) {
+            mkdir($builderOptions->getOutputDir(), 0600, TRUE);
+        }
+        $this->builder = new Builder(array('Zckrs\GenDocApi\Test\Client'), $builderOptions);
+
+        $this->builder->generate();
     }
 }

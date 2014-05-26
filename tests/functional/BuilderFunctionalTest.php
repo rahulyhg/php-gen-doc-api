@@ -29,7 +29,8 @@ class BuilderFunctionnalTest extends \PHPUnit_Framework_TestCase
         $this->assertContains(sprintf('<p>%s</p>', $this->appDescription), $this->docContent);
         $this->assertContains('Client', $this->docContent);
         $this->assertContains('GET', $this->docContent);
-        $this->assertContains('/api/clients/{id}', $this->docContent);
+        $this->assertContains('/api/clients/', $this->docContent);
+        $this->assertContains('/api/clients/post/{id}', $this->docContent);
         $this->assertContains('Status code returned', $this->docContent);
     }
 
@@ -49,7 +50,8 @@ class BuilderFunctionnalTest extends \PHPUnit_Framework_TestCase
         try {
             $builder = new Builder(
                 array(
-                    'Zckrs\GenDocApi\Test\Client'
+                    'Zckrs\GenDocApi\Test\Client',
+                    'Zckrs\GenDocApi\Test\Document'
                 ),
                 $builderOptions
             );

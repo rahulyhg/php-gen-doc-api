@@ -1,12 +1,17 @@
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Data Type</th>
-            <th>Description</th>
-        </tr>
-    </thead>
-    <tbody>
-        {{ responseTableBody }}
-    </tbody>
-</table>
+<div id="classes_{{ elt_id }}">
+    <h4>Response Classes</h4>
+    {{ sample_root_object }}
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ responseTableBody }}
+        </tbody>
+    </table>
+    <hr>
+</div>

@@ -10,15 +10,9 @@
             <div class="tab-content">
 
                 <div id="info{{ elt_id }}">
-                    <h4>Implementation Notes</h4>
-                    {{ description }}<br/><br/>
-                    <hr>
+                    {{ implementation_notes }}
 
-                    <h4>Response Classes</h4>
-                    {{ sample_root_object }}
-                    {{ table_object_response }}
-                    <br/>
-                    <hr>
+                    {{ response_classes }}
 
                     <h4>Response Errors</h4>
                     <table class="table table-hover">
@@ -61,9 +55,7 @@
                     </table>
                     <hr>
 
-                    <h4>Path Parameters</h4>
-                    {{ parameters }}
-                    <hr>
+                    {{ path_parameters }}
 
                     <div id="response_{{ elt_id }}" class="col-md-12" style="display:none;">
                         <h4>Request URL</h4>
