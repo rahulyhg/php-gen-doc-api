@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="php-gen-doc-api - agnostic generator documentation for api">
     <meta name="author" content="Mehdy Dara">
@@ -89,7 +89,7 @@ th a.anchor {
         <div class="navbar-collapse collapse">
             <form class="navbar-form navbar-right">
                 <div class="form-group">
-                    Api key: <a href="javascript:void(0);" class="tooltipP" data-toggle="tooltip" title="Api key header with api key (key) and api key value (value) "><span class="glyphicon glyphicon-info-sign"></span></a>
+                    Api key: <a href="javascript:void(0);" class="tooltipP" data-toggle="tooltip" title="Define a custom header to API authentication."><span class="glyphicon glyphicon-info-sign"></span></a>
                 </div>
                 <div class="form-group">
                     <input type="text" class="form-control input-sm" placeholder="key" id="apikey_key">
@@ -110,6 +110,8 @@ th a.anchor {
                     <h4>Ressources</h4>
                     <a href="#Client_anchor_0">Client</a><br/>
 
+<a href="#Document_anchor_4">Document</a><br/>
+
                 </div>
             </div>
 
@@ -121,7 +123,7 @@ th a.anchor {
 <div class="panel panel-default">
     <div class="panel-heading">
         <h4 class="panel-title">
-            <span class="label label-success">GET</span> <a data-toggle="collapse" data-parent="#accordion0" href="#collapseOne0"> /api/clients/{id}</a>
+            <span class="label label-success">GET</span> <a data-toggle="collapse" data-parent="#accordion0" href="#collapseOne0"> /api/clients</a>
         </h4>
     </div>
 
@@ -130,22 +132,28 @@ th a.anchor {
             <div class="tab-content">
 
                 <div id="info0">
-                    <h4>Implementation Notes</h4>
-                    Get one client by ID<br/><br/>
-                    <hr>
+                    <div id="notes_0">
+    <h4>Implementation Notes</h4>
+    <p >Get one client by ID</p>
+</div>
+<hr>
 
-                    <h4>Response Classes</h4>
-                    <h5>Return JSON root object :</h5><pre class="sample_root_object prettyprint">{ 'meta': metaObject, 'response': array[responseObject] }</pre>
-                    <table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Data Type</th>
-            <th>Description</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr class="info">
+
+                    <div id="classes_0">
+    <h4>Response Classes</h4>
+    <h5>Return JSON root object :</h5>
+<pre class="sample_root_object prettyprint">{ 'meta': metaObject, 'response': array[clientObject] }</pre>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="info">
     <th colspan="3"><a class="anchor" id="metaObject_anchor_0"></a><i>metaObject</i></th>
 </tr>
 
@@ -168,23 +176,23 @@ th a.anchor {
 </tr>
 
 <tr class="info">
-    <th colspan="3"><a class="anchor" id="responseObject_anchor_0"></a><i>responseObject</i></th>
+    <th colspan="3"><a class="anchor" id="clientObject_anchor_0"></a><i>clientObject</i></th>
 </tr>
 
 <tr>
     <td>
-        msg
+        id
         <div class="note"></div>
     </td>
-    <td>array</td>
-    <td>A array of responseObject (cf section Content)</td>
+    <td>integer</td>
+    <td>ID client</td>
 </tr>
 
-    </tbody>
-</table>
+        </tbody>
+    </table>
+    <hr>
+</div>
 
-                    <br/>
-                    <hr>
 
                     <h4>Response Errors</h4>
                     <table class="table table-hover">
@@ -227,34 +235,27 @@ th a.anchor {
                     </table>
                     <hr>
 
-                    <h4>Path Parameters</h4>
-                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/clients/{id}" method="GET" name="form0" id="form0">
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Value</th>
-                <th>Data Type</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-    <td>
-        id
-        <div class="note">required</div>
-    </td>
-    <td><input type="text" class="form-control input-sm" id="id" placeholder="id" name="id"></td>
-    <td>integer</td>
-    <td>The client ID</td>
-</tr>
+                    <div id="parameters_0">
+    <h4>Path Parameters</h4>
+    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/clients" method="GET" name="form0" id="form0">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Data Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
 
-        </tbody>
-    </table>
-    <button type="submit" class="btn btn-danger send" rel="0">EXECUTE REQUEST</button>
-</form>
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-danger send" rel="0">EXECUTE REQUEST</button><img id="spinner_0" alt='spinner' src="http://www.jquery4u.com/demos/loading-images/img/image_381416.gif" style="display: none;">
+    </form>
+    <hr>
+</div>
 
-                    <hr>
 
                     <div id="response_0" class="col-md-12" style="display:none;">
                         <h4>Request URL</h4>
@@ -290,6 +291,829 @@ th a.anchor {
     </div>
 </div>
 
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <span class="label label-primary">POST</span> <a data-toggle="collapse" data-parent="#accordion1" href="#collapseOne1"> /api/clients/post/{id}</a>
+        </h4>
+    </div>
+
+    <div id="collapseOne1" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="tab-content">
+
+                <div id="info1">
+                    <div id="notes_1">
+    <h4>Implementation Notes</h4>
+    <p >Post profile information</p>
+</div>
+<hr>
+
+
+                    <div id="classes_1">
+    <h4>Response Classes</h4>
+    <h5>Return JSON root object :</h5>
+<pre class="sample_root_object prettyprint">{ 'nameClient': responseObject }</pre>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="info">
+    <th colspan="3"><a class="anchor" id="responseObject_anchor_1"></a><i>responseObject</i></th>
+</tr>
+
+<tr>
+    <td>
+        id
+        <div class="note"></div>
+    </td>
+    <td>integer</td>
+    <td></td>
+</tr>
+
+<tr>
+    <td>
+        name
+        <div class="note"></div>
+    </td>
+    <td>string</td>
+    <td>You can use HTML <img alt='nyancat' width='40' height='28' src='http://24.media.tumblr.com/tumblr_lrzr21KKoO1qjngfmo1_400.gif'></td>
+</tr>
+
+        </tbody>
+    </table>
+    <hr>
+</div>
+
+
+                    <h4>Response Errors</h4>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>HTTP Status Code</th>
+                                <th>Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>400</td>
+                                <td>Bad request</td>
+                            </tr>
+                            <tr>
+                                <td>401</td>
+                                <td>Unauthorized</td>
+                            </tr>
+                            <tr>
+                                <td>404</td>
+                                <td>Not Found</td>
+                            </tr>
+                            <tr>
+                                <td>405</td>
+                                <td>Method not allowed</td>
+                            </tr>
+                            <tr>
+                                <td>429</td>
+                                <td>Rate limit exceeded</td>
+                            </tr>
+                            <tr>
+                                <td>500</td>
+                                <td>Internal server error</td>
+                            </tr>
+                            <tr>
+                                <td>503</td>
+                                <td>Service unavailable</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+
+                    <div id="parameters_1">
+    <h4>Path Parameters</h4>
+    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/clients/post/{id}" method="POST" name="form1" id="form1">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Data Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+    <td>
+        id
+        <div class="note">required</div>
+    </td>
+    <td><input type="text" class="form-control input-sm" placeholder="id" name="id"></td>
+    <td>integer</td>
+    <td>The client ID</td>
+</tr>
+
+<tr>
+    <td>
+        form
+        <div class="note">required</div>
+    </td>
+    <td><input type="text" class="form-control input-sm" placeholder="form" name="form"></td>
+    <td>object <a data-toggle="popover" data-placement="right" data-title="Example" data-content="{ 'name':'ABCD', 'email':'abcd@gmail.com' }">
+    <span class="btn glyphicon glyphicon-question-sign"></span>
+</a>
+</td>
+    <td>Form to modify client</td>
+</tr>
+
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-danger send" rel="1">EXECUTE REQUEST</button><img id="spinner_1" alt='spinner' src="http://www.jquery4u.com/demos/loading-images/img/image_381416.gif" style="display: none;">
+    </form>
+    <hr>
+</div>
+
+
+                    <div id="response_1" class="col-md-12" style="display:none;">
+                        <h4>Request URL</h4>
+                        <div id="request_url_1">
+                            <pre></pre>
+                        </div>
+
+                        <!-- <h4>Request Headers</h4>
+                            <div id="request_headers_1">
+                                <pre></pre>
+                            </div> -->
+
+                        <h4>Response Code</h4>
+                        <div id="response_code_1">
+                            <pre></pre>
+                        </div>
+
+                        <h4>Response Headers</h4>
+                        <div id="response_headers_1">
+                            <pre></pre>
+                        </div>
+
+                        <h4>Response Body</h4>
+                        <div id="response_body_1">
+                            <pre class="prettyprint"></pre>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- .tab-content -->
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <span class="label label-danger">DELETE</span> <a data-toggle="collapse" data-parent="#accordion2" href="#collapseOne2"> /api/clients/delete/{id}</a>
+        </h4>
+    </div>
+
+    <div id="collapseOne2" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="tab-content">
+
+                <div id="info2">
+                    <div id="notes_2">
+    <h4>Implementation Notes</h4>
+    <p >Delete one client by ID</p>
+</div>
+<hr>
+
+
+                    <div id="classes_2">
+    <h4>Response Classes</h4>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="info">
+    <th colspan="3"><a class="anchor" id="metaObject_anchor_2"></a><i>metaObject</i></th>
+</tr>
+
+<tr>
+    <td>
+        status
+        <div class="note"></div>
+    </td>
+    <td>string</td>
+    <td>Status code returned</td>
+</tr>
+
+<tr>
+    <td>
+        msg
+        <div class="note"></div>
+    </td>
+    <td>string</td>
+    <td>Message to describe status code</td>
+</tr>
+
+<tr class="info">
+    <th colspan="3"><a class="anchor" id="clientObject_anchor_2"></a><i>clientObject</i></th>
+</tr>
+
+<tr>
+    <td>
+        id
+        <div class="note"></div>
+    </td>
+    <td>integer</td>
+    <td>ID client</td>
+</tr>
+
+        </tbody>
+    </table>
+    <hr>
+</div>
+
+
+                    <h4>Response Errors</h4>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>HTTP Status Code</th>
+                                <th>Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>400</td>
+                                <td>Bad request</td>
+                            </tr>
+                            <tr>
+                                <td>401</td>
+                                <td>Unauthorized</td>
+                            </tr>
+                            <tr>
+                                <td>404</td>
+                                <td>Not Found</td>
+                            </tr>
+                            <tr>
+                                <td>405</td>
+                                <td>Method not allowed</td>
+                            </tr>
+                            <tr>
+                                <td>429</td>
+                                <td>Rate limit exceeded</td>
+                            </tr>
+                            <tr>
+                                <td>500</td>
+                                <td>Internal server error</td>
+                            </tr>
+                            <tr>
+                                <td>503</td>
+                                <td>Service unavailable</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+
+                    <div id="parameters_2">
+    <h4>Path Parameters</h4>
+    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/clients/delete/{id}" method="DELETE" name="form2" id="form2">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Data Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+    <td>
+        id
+        <div class="note">required</div>
+    </td>
+    <td><input type="text" class="form-control input-sm" placeholder="id" name="id"></td>
+    <td>integer</td>
+    <td>The client ID</td>
+</tr>
+
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-danger send" rel="2">EXECUTE REQUEST</button><img id="spinner_2" alt='spinner' src="http://www.jquery4u.com/demos/loading-images/img/image_381416.gif" style="display: none;">
+    </form>
+    <hr>
+</div>
+
+
+                    <div id="response_2" class="col-md-12" style="display:none;">
+                        <h4>Request URL</h4>
+                        <div id="request_url_2">
+                            <pre></pre>
+                        </div>
+
+                        <!-- <h4>Request Headers</h4>
+                            <div id="request_headers_2">
+                                <pre></pre>
+                            </div> -->
+
+                        <h4>Response Code</h4>
+                        <div id="response_code_2">
+                            <pre></pre>
+                        </div>
+
+                        <h4>Response Headers</h4>
+                        <div id="response_headers_2">
+                            <pre></pre>
+                        </div>
+
+                        <h4>Response Body</h4>
+                        <div id="response_body_2">
+                            <pre class="prettyprint"></pre>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- .tab-content -->
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <span class="label label-warning">PUT</span> <a data-toggle="collapse" data-parent="#accordion3" href="#collapseOne3"> /api/clients/delete/{id}</a>
+        </h4>
+    </div>
+
+    <div id="collapseOne3" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="tab-content">
+
+                <div id="info3">
+
+
+
+
+                    <h4>Response Errors</h4>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>HTTP Status Code</th>
+                                <th>Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>400</td>
+                                <td>Bad request</td>
+                            </tr>
+                            <tr>
+                                <td>401</td>
+                                <td>Unauthorized</td>
+                            </tr>
+                            <tr>
+                                <td>404</td>
+                                <td>Not Found</td>
+                            </tr>
+                            <tr>
+                                <td>405</td>
+                                <td>Method not allowed</td>
+                            </tr>
+                            <tr>
+                                <td>429</td>
+                                <td>Rate limit exceeded</td>
+                            </tr>
+                            <tr>
+                                <td>500</td>
+                                <td>Internal server error</td>
+                            </tr>
+                            <tr>
+                                <td>503</td>
+                                <td>Service unavailable</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+
+                    <div id="parameters_3">
+    <h4>Path Parameters</h4>
+    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/clients/delete/{id}" method="PUT" name="form3" id="form3">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Data Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+    <td>
+        id
+        <div class="note">required</div>
+    </td>
+    <td><input type="text" class="form-control input-sm" placeholder="id" name="id"></td>
+    <td>integer</td>
+    <td>The client ID</td>
+</tr>
+
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-danger send" rel="3">EXECUTE REQUEST</button><img id="spinner_3" alt='spinner' src="http://www.jquery4u.com/demos/loading-images/img/image_381416.gif" style="display: none;">
+    </form>
+    <hr>
+</div>
+
+
+                    <div id="response_3" class="col-md-12" style="display:none;">
+                        <h4>Request URL</h4>
+                        <div id="request_url_3">
+                            <pre></pre>
+                        </div>
+
+                        <!-- <h4>Request Headers</h4>
+                            <div id="request_headers_3">
+                                <pre></pre>
+                            </div> -->
+
+                        <h4>Response Code</h4>
+                        <div id="response_code_3">
+                            <pre></pre>
+                        </div>
+
+                        <h4>Response Headers</h4>
+                        <div id="response_headers_3">
+                            <pre></pre>
+                        </div>
+
+                        <h4>Response Body</h4>
+                        <div id="response_body_3">
+                            <pre class="prettyprint"></pre>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- .tab-content -->
+        </div>
+    </div>
+</div>
+
+<h3>Document<a class="anchor" id="Document_anchor_4"></a></h3>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <span class="label label-success">GET</span> <a data-toggle="collapse" data-parent="#accordion4" href="#collapseOne4"> /api/documents/{id}</a>
+        </h4>
+    </div>
+
+    <div id="collapseOne4" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="tab-content">
+
+                <div id="info4">
+                    <div id="notes_4">
+    <h4>Implementation Notes</h4>
+    <p >Get one document by ID</p>
+</div>
+<hr>
+
+
+                    <div id="classes_4">
+    <h4>Response Classes</h4>
+    <h5>Return JSON root object :</h5>
+<pre class="sample_root_object prettyprint">{ 'nameDocument': documentObject }</pre>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="info">
+    <th colspan="3"><a class="anchor" id="documentObject_anchor_4"></a><i>documentObject</i></th>
+</tr>
+
+<tr>
+    <td>
+        id
+        <div class="note"></div>
+    </td>
+    <td>number</td>
+    <td>A serie of 13 numbers.</td>
+</tr>
+
+<tr>
+    <td>
+        title
+        <div class="note">optional</div>
+    </td>
+    <td>string</td>
+    <td>The title of document.</td>
+</tr>
+
+<tr>
+    <td>
+        content
+        <div class="note"></div>
+    </td>
+    <td>string</td>
+    <td>Content of document.</td>
+</tr>
+
+<tr>
+    <td>
+        authors
+        <div class="note"></div>
+    </td>
+    <td>array</td>
+    <td>Array of authors. See <a href="#authorObject_anchor_4">@authorObject</a>
+</td>
+</tr>
+
+<tr class="info">
+    <th colspan="3"><a class="anchor" id="authorObject_anchor_4"></a><i>authorObject</i></th>
+</tr>
+
+<tr>
+    <td>
+        firstname
+        <div class="note"></div>
+    </td>
+    <td>string</td>
+    <td></td>
+</tr>
+
+<tr>
+    <td>
+        lastname
+        <div class="note"></div>
+    </td>
+    <td>string</td>
+    <td></td>
+</tr>
+
+        </tbody>
+    </table>
+    <hr>
+</div>
+
+
+                    <h4>Response Errors</h4>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>HTTP Status Code</th>
+                                <th>Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>400</td>
+                                <td>Bad request</td>
+                            </tr>
+                            <tr>
+                                <td>401</td>
+                                <td>Unauthorized</td>
+                            </tr>
+                            <tr>
+                                <td>404</td>
+                                <td>Not Found</td>
+                            </tr>
+                            <tr>
+                                <td>405</td>
+                                <td>Method not allowed</td>
+                            </tr>
+                            <tr>
+                                <td>429</td>
+                                <td>Rate limit exceeded</td>
+                            </tr>
+                            <tr>
+                                <td>500</td>
+                                <td>Internal server error</td>
+                            </tr>
+                            <tr>
+                                <td>503</td>
+                                <td>Service unavailable</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+
+                    <div id="parameters_4">
+    <h4>Path Parameters</h4>
+    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/documents/{id}" method="GET" name="form4" id="form4">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Data Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+    <td>
+        id
+        <div class="note">required</div>
+    </td>
+    <td><input type="text" class="form-control input-sm" placeholder="id" name="id"></td>
+    <td>integer <a data-toggle="popover" data-placement="right" data-title="Example" data-content="6684516529217">
+    <span class="btn glyphicon glyphicon-question-sign"></span>
+</a>
+</td>
+    <td>The document ID</td>
+</tr>
+
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-danger send" rel="4">EXECUTE REQUEST</button><img id="spinner_4" alt='spinner' src="http://www.jquery4u.com/demos/loading-images/img/image_381416.gif" style="display: none;">
+    </form>
+    <hr>
+</div>
+
+
+                    <div id="response_4" class="col-md-12" style="display:none;">
+                        <h4>Request URL</h4>
+                        <div id="request_url_4">
+                            <pre></pre>
+                        </div>
+
+                        <!-- <h4>Request Headers</h4>
+                            <div id="request_headers_4">
+                                <pre></pre>
+                            </div> -->
+
+                        <h4>Response Code</h4>
+                        <div id="response_code_4">
+                            <pre></pre>
+                        </div>
+
+                        <h4>Response Headers</h4>
+                        <div id="response_headers_4">
+                            <pre></pre>
+                        </div>
+
+                        <h4>Response Body</h4>
+                        <div id="response_body_4">
+                            <pre class="prettyprint"></pre>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- .tab-content -->
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <span class="label label-warning">PUT</span> <a data-toggle="collapse" data-parent="#accordion5" href="#collapseOne5"> /api/documents/put/{id}</a>
+        </h4>
+    </div>
+
+    <div id="collapseOne5" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="tab-content">
+
+                <div id="info5">
+                    <div id="notes_5">
+    <h4>Implementation Notes</h4>
+    <p >Put a document.</p>
+</div>
+<hr>
+
+
+
+
+                    <h4>Response Errors</h4>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>HTTP Status Code</th>
+                                <th>Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>400</td>
+                                <td>Bad request</td>
+                            </tr>
+                            <tr>
+                                <td>401</td>
+                                <td>Unauthorized</td>
+                            </tr>
+                            <tr>
+                                <td>404</td>
+                                <td>Not Found</td>
+                            </tr>
+                            <tr>
+                                <td>405</td>
+                                <td>Method not allowed</td>
+                            </tr>
+                            <tr>
+                                <td>429</td>
+                                <td>Rate limit exceeded</td>
+                            </tr>
+                            <tr>
+                                <td>500</td>
+                                <td>Internal server error</td>
+                            </tr>
+                            <tr>
+                                <td>503</td>
+                                <td>Service unavailable</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+
+                    <div id="parameters_5">
+    <h4>Path Parameters</h4>
+    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/documents/put/{id}" method="PUT" name="form5" id="form5">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Data Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+    <td>
+        id
+        <div class="note">required</div>
+    </td>
+    <td><input type="text" class="form-control input-sm" placeholder="id" name="id"></td>
+    <td>integer <a data-toggle="popover" data-placement="right" data-title="Example" data-content="2489516529217">
+    <span class="btn glyphicon glyphicon-question-sign"></span>
+</a>
+</td>
+    <td>The document ID</td>
+</tr>
+
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-danger send" rel="5">EXECUTE REQUEST</button><img id="spinner_5" alt='spinner' src="http://www.jquery4u.com/demos/loading-images/img/image_381416.gif" style="display: none;">
+    </form>
+    <hr>
+</div>
+
+
+                    <div id="response_5" class="col-md-12" style="display:none;">
+                        <h4>Request URL</h4>
+                        <div id="request_url_5">
+                            <pre></pre>
+                        </div>
+
+                        <!-- <h4>Request Headers</h4>
+                            <div id="request_headers_5">
+                                <pre></pre>
+                            </div> -->
+
+                        <h4>Response Code</h4>
+                        <div id="response_code_5">
+                            <pre></pre>
+                        </div>
+
+                        <h4>Response Headers</h4>
+                        <div id="response_headers_5">
+                            <pre></pre>
+                        </div>
+
+                        <h4>Response Body</h4>
+                        <div id="response_body_5">
+                            <pre class="prettyprint"></pre>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- .tab-content -->
+        </div>
+    </div>
+</div>
+
             </div>
         </div>
 
@@ -297,10 +1121,10 @@ th a.anchor {
 
         <div class="row footer">
             <div class="col-md-6">
-                Generated on 2014-05-23, 16:05:06
+                Generated on 2014-05-28, 11:30:24
             </div>
             <div class="col-md-6 text-right">
-                <a href="https://github.com/zckrs/php-gen-doc-api" target="_blank">php-gen-doc-api v1.4</a>
+                <a href="https://github.com/zckrs/php-gen-doc-api" target="_blank">php-gen-doc-api v1.0.0</a>
             </div>
         </div>
 
@@ -357,12 +1181,11 @@ $(document).ready(function () {
 
         if (matchedParamsInRoute) {
             $("form#" + $(form).attr('id') + " input[type=text]").each(function () {
-                var input = $(this);
                 var index;
                 for (index = 0; index < matchedParamsInRoute.length; ++index) {
                     try {
                         var tmp = matchedParamsInRoute[index].replace('{', '').replace('}', '');
-                        if ($(this).attr('id') == tmp) {
+                        if ($(this).attr('name') == tmp) {
                             urlForm = urlForm.replace(matchedParamsInRoute[index], $(this).val());
                         }
                     } catch (err) {
@@ -370,7 +1193,7 @@ $(document).ready(function () {
                     }
                 }
             });
-        };
+        }
 
         $('#' + $(form).attr('id') + ' input[type=text]').each(function () {
             if (matchedParamsInRoute.indexOf('{' + $(this).attr('id') + '}') === -1 && $(this).val() !== '') {
@@ -387,6 +1210,9 @@ $(document).ready(function () {
             type: '' + $(form).attr('method') + '',
             dataType: 'json',
             headers: customHeaders,
+            beforeSend: function() {
+                $('#spinner_' + theId).show();
+            },
             success: function (data, textStatus, jqXHR) {
                 if (typeof data === 'object') {
                     $('#response_body_' + theId + ' pre').html(JSON.stringify(data, undefined, 4)).removeClass("prettyprinted");
@@ -415,6 +1241,7 @@ $(document).ready(function () {
                 $('#response_code_' + theId + ' pre').html(jqXHR.status);
                 $('#response_headers_' + theId + ' pre').html(jqXHR.getAllResponseHeaders());
                 $('#response_' + theId).show();
+                $('#spinner_' + theId).hide();
             }
         });
 
