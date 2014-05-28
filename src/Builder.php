@@ -12,7 +12,7 @@ class Builder
      *
      * @var string
      */
-    const VERSION = '1.4';
+    const VERSION = '1.0.0';
 
     /**
      * Array of classes that contains annotations used to generate the output

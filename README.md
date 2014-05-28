@@ -16,7 +16,9 @@ Generate documentation for PHP API with Annotations. No dependency. No framework
 
 ### <a id="preview"></a>Preview
 
-You can see a sample generated documentation based on class [Client](tests/sample/Client.php) on http://zckrs.github.io/php-gen-doc-api/
+You can see a sample generated documentation based on [Client](tests/sample/Client.php) and [Document](tests/sample/Document.php):
+
+http://zckrs.github.io/php-gen-doc-api/
 
 ### <a id="requirements"></a>Requirements
 
